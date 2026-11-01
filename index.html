@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AETHER // Personal Life OS</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons for crisp futuristic iconography -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Google Fonts: Orbitron / Space Grotesk for titles, Inter & JetBrains Mono for data -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            void: '#06060b',
+            obsidian: '#0d0d17',
+            panel: 'rgba(16, 16, 28, 0.72)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --led-intensity: 1;
+      --led-speed: 3.5s;
+      --primary-neon: #a855f7;
+      --primary-glow: rgba(168, 85, 247, 0.65);
+      /* Module Neon Colors */
+      --neon-tasks: #a855f7;     /* Electric Purple */
+      --neon-calendar: #06b6d4;  /* Cyber Cyan */
+      --neon-goals: #ec4899;     /* Neon Magenta */
+      --neon-routine: #f59e0b;   /* Neon Amber */
+      --neon-budget: #10b981;    /* Neon Emerald */
+      --neon-health: #f43f5e;    /* Neon Crimson */
+    }
+
+    * {
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(168, 85, 247, 0.35) rgba(10, 10, 18, 0.4);
+    }
+
+    *::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    *::-webkit-scrollbar-track {
+      background: rgba(10, 10, 18, 0.4);
+    }
+    *::-webkit-scrollbar-thumb {
+      background: rgba(168, 85, 247, 0.4);
+      border-radius: 9999px;
+    }
+
+    body {
+      background-color: #05050a;
+      background-image: 
+        radial-gradient(circle at 18% 12%, rgba(168, 85, 247, 0.12) 0%, transparent 38%),
+        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.08) 0%, transparent 35%),
+        radial-gradient(circle at 52% 45%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+      color: #f3f4f6;
+      overflow-x: hidden;
+    }
+
+    /* Animated LED Title Effects */
+    @keyframes ledPulse {
+      0%, 100% {
+        text-shadow: 
+          0 0 calc(6px * var(--led-intensity)) var(--module-color, #a855f7),
+          0 0 calc(16px * var(--led-intensity)) var(--module-color, #a855f7),
+          0 0 calc(28px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 60%, transparent);
+        filter: brightness(1.08);
+      }
+      50% {
+        text-shadow: 
+          0 0 calc(3px * var(--led-intensity)) var(--module-color, #a855f7),
+          0 0 calc(9px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 75%, transparent);
+        filter: brightness(0.95);
+      }
+    }
+
+    @keyframes ledTubeFlow {
+      0% {
+        background-position: 0% 50%;
+        box-shadow: 0 0 calc(10px * var(--led-intensity)) var(--module-color, #a855f7),
+                    0 0 calc(20px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 50%, transparent);
+      }
+      50% {
+        background-position: 100% 50%;
+        box-shadow: 0 0 calc(15px * var(--led-intensity)) var(--module-color, #a855f7),
+                    0 0 calc(30px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 80%, transparent);
+      }
+      100% {
+        background-position: 0% 50%;
+        box-shadow: 0 0 calc(10px * var(--led-intensity)) var(--module-color, #a855f7),
+                    0 0 calc(20px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 50%, transparent);
+      }
+    }
+
+    @keyframes borderBreathe {
+      0%, 100% {
+        border-color: color-mix(in srgb, var(--module-color, #a855f7) 45%, rgba(255,255,255,0.08));
+        box-shadow: 
+          0 8px 30px -10px rgba(0, 0, 0, 0.7),
+          0 0 calc(15px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 18%, transparent),
+          inset 0 0 calc(12px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 8%, transparent);
+      }
+      50% {
+        border-color: color-mix(in srgb, var(--module-color, #a855f7) 75%, rgba(255,255,255,0.2));
+        box-shadow: 
+          0 10px 35px -8px rgba(0, 0, 0, 0.8),
+          0 0 calc(24px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 30%, transparent),
+          inset 0 0 calc(18px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 14%, transparent);
+      }
+    }
+
+    @keyframes ecgTrace {
+      0% { stroke-dashoffset: 600; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    .led-title {
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.08em;
+      animation: ledPulse var(--led-speed) ease-in-out infinite;
+    }
+
+    /* Glowing LED Light Bar under/beside titles */
+    .led-strip {
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--module-color, #a855f7) 25%, 
+        #ffffff 50%, 
+        var(--module-color, #a855f7) 75%, 
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: ledTubeFlow var(--led-speed) ease-in-out infinite;
+    }
+
+    .led-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background-color: #fff;
+      box-shadow: 
+        0 0 calc(6px * var(--led-intensity)) #fff,
+        0 0 calc(12px * var(--led-intensity)) var(--module-color, #a855f7),
+        0 0 calc(20px * var(--led-intensity)) var(--module-color, #a855f7);
+      animation: ledPulse calc(var(--led-speed) * 0.7) infinite;
+    }
+
+    /* Module Card Glass & Folder Tab Geometry */
+    .bento-card {
+      position: relative;
+      background: linear-gradient(155deg, rgba(20, 20, 35, 0.78) 0%, rgba(10, 10, 19, 0.88) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.15rem;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: borderBreathe calc(var(--led-speed) * 1.4) ease-in-out infinite;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-3px) scale(1.006);
+      border-color: var(--module-color, #a855f7);
+      box-shadow: 
+        0 14px 40px -10px rgba(0, 0, 0, 0.85),
+        0 0 calc(32px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 40%, transparent),
+        inset 0 0 calc(22px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 16%, transparent);
+    }
+
+    /* Folder Top Tab Accent on Cards */
+    .folder-ear {
+      position: absolute;
+      top: -1px;
+      left: 20px;
+      height: 5px;
+      width: 76px;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      background: var(--module-color, #a855f7);
+      box-shadow: 
+        0 2px calc(12px * var(--led-intensity)) var(--module-color, #a855f7),
+        0 0 calc(20px * var(--led-intensity)) var(--module-color, #a855f7);
+    }
+
+    /* Folder Overlay Modal Styling */
+    .folder-modal-shell {
+      position: relative;
+      background: linear-gradient(165deg, rgba(16, 16, 30, 0.94) 0%, rgba(8, 8, 16, 0.97) 100%);
+      border: 1.5px solid var(--module-color, #a855f7);
+      box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.92),
+        0 0 calc(45px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 42%, transparent),
+        inset 0 0 calc(28px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 14%, transparent);
+      backdrop-filter: blur(24px);
+    }
+
+    /* Folder Tab Shape on the Expanded Overlay */
+    .folder-modal-tab {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.6rem 1.5rem 0.5rem 1.25rem;
+      background: rgba(16, 16, 30, 0.96);
+      border-top: 2px solid var(--module-color, #a855f7);
+      border-left: 1.5px solid var(--module-color, #a855f7);
+      border-right: 1.5px solid var(--module-color, #a855f7);
+      border-top-left-radius: 0.9rem;
+      border-top-right-radius: 1.2rem;
+      margin-bottom: -1.5px;
+      z-index: 10;
+      box-shadow: 0 -6px calc(20px * var(--led-intensity)) color-mix(in srgb, var(--module-color, #a855f7) 35%, transparent);
+    }
+
+    .ecg-path {
+      stroke-dasharray: 600;
+      stroke-dashoffset: 600;
+      animation: ecgTrace 3.5s linear infinite;
+    }
+
+    .privacy-blur .sensitive-data {
+      filter: blur(6px);
+      user-select: none;
+      transition: filter 0.25s ease;
+    }
+    .privacy-blur .sensitive-data:hover {
+      filter: blur(0px);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen lg:h-screen lg:overflow-hidden flex flex-col select-none">
+
+  <!-- AMBIENT TOP LED WIRE -->
+  <div class="w-full h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-80 shadow-[0_0_15px_#a855f7]"></div>
+
+  <!-- FLOATING SIDEBAR RE-OPEN BUTTON (Shown only when sidebar is completely hidden) -->
+  <button id="restoreSidebarBtn" onclick="setSidebarState('expanded')" 
+    class="fixed top-4 left-4 z-40 hidden items-center gap-2 px-3.5 py-2 rounded-xl bg-[#111122]/90 border border-purple-500/60 text-purple-300 shadow-[0_0_20px_rgba(168,85,247,0.45)] hover:bg-purple-950/60 transition-all">
+    <i class="ph-bold ph-sidebar-simple text-lg text-purple-400"></i>
+    <span class="text-xs font-display tracking-wider uppercase">Sidebar</span>
+  </button>
+
+  <!-- MAIN APPLICATION WRAPPER -->
+  <div class="flex-1 flex w-full lg:h-[calc(100vh-2px)] relative overflow-hidden">
+
+    <!-- ================= COLLAPSIBLE & HIDEABLE SIDEBAR ================= -->
+    <aside id="appSidebar" 
+      class="w-64 shrink-0 h-full bg-[#090913]/90 backdrop-blur-2xl border-r border-purple-500/20 flex flex-col justify-between transition-all duration-300 z-30 relative shadow-[8px_0_30px_rgba(0,0,0,0.6)]">
+      
+      <!-- Top Brand & Sidebar Controls -->
+      <div class="p-4 border-b border-white/5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-3 overflow-hidden">
+            <div class="w-9 h-9 rounded-xl bg-purple-600/20 border border-purple-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.6)]">
+              <i class="ph-fill ph-planet text-xl text-purple-300"></i>
+            </div>
+            <div class="sidebar-label-group truncate">
+              <div class="flex items-center gap-1.5">
+                <h1 class="led-title text-base font-bold text-white tracking-widest" style="--module-color: #a855f7;">AETHER</h1>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">OS 4.9</span>
+              </div>
+              <p class="text-[10px] text-slate-400 font-mono truncate">PRIVATE NEON NEXUS</p>
+            </div>
+          </div>
+
+          <!-- Collapse to Mini / Hide Completely Controls -->
+          <div class="flex items-center gap-1 shrink-0">
+            <button onclick="toggleSidebarCompact()" title="Compact / Expand Sidebar"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-purple-300 hover:bg-purple-500/10 transition">
+              <i id="compactIcon" class="ph ph-arrows-in-line-horizontal text-base"></i>
+            </button>
+            <button onclick="setSidebarState('hidden')" title="Hide Sidebar Completely"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition">
+              <i class="ph ph-eye-slash text-base"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Folders -->
+      <div class="flex-1 overflow-y-auto py-3 px-2.5 space-y-1">
+        <div class="sidebar-label-group px-2 pb-1.5 text-[10px] font-mono uppercase tracking-widest text-purple-400/70">
+          Core Folders
+        </div>
+
+        <button onclick="openFolder('tasks')" class="w-full group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-purple-500/15 border border-transparent hover:border-purple-500/40 transition-all">
+          <div class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_8px_#a855f7]"></span>
+            <i class="ph-duotone ph-check-square-offset text-lg text-purple-400"></i>
+            <span class="sidebar-label-group text-xs font-medium text-slate-200 group-hover:text-white">Tasks</span>
+          </div>
+          <span class="sidebar-label-group text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">5</span>
+        </button>
+
+        <button onclick="openFolder('calendar')" class="w-full group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-cyan-500/15 border border-transparent hover:border-cyan-500/40 transition-all">
+          <div class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#06b6d4]"></span>
+            <i class="ph-duotone ph-calendar-blank text-lg text-cyan-400"></i>
+            <span class="sidebar-label-group text-xs font-medium text-slate-200 group-hover:text-white">Calendar</span>
+          </div>
+          <span class="sidebar-label-group text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300">3</span>
+        </button>
+
+        <button onclick="openFolder('goals')" class="w-full group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-pink-500/15 border border-transparent hover:border-pink-500/40 transition-all">
+          <div class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-pink-500 shadow-[0_0_8px_#ec4899]"></span>
+            <i class="ph-duotone ph-target text-lg text-pink-400"></i>
+            <span class="sidebar-label-group text-xs font-medium text-slate-200 group-hover:text-white">Goals</span>
+          </div>
+          <span class="sidebar-label-group text-[10px] font-mono px-1.5 py-0.5 rounded bg-pink-500/20 text-pink-300">78%</span>
+        </button>
+
+        <button onclick="openFolder('routine')" class="w-full group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/40 transition-all">
+          <div class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]"></span>
+            <i class="ph-duotone ph-lightning text-lg text-amber-400"></i>
+            <span class="sidebar-label-group text-xs font-medium text-slate-200 group-hover:text-white">Routine Today</span>
+          </div>
+          <span class="sidebar-label-group text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">14d</span>
+        </button>
+
+        <button onclick="openFolder('budget')" class="w-full group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-emerald-500/15 border border-transparent hover:border-emerald-500/40 transition-all">
+          <div class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]"></span>
+            <i class="ph-duotone ph-currency-circle-dollar text-lg text-emerald-400"></i>
+            <span class="sidebar-label-group text-xs font-medium text-slate-200 group-hover:text-white">Budget</span>
+          </div>
+          <span class="sidebar-label-group text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 sensitive-data">+$2.8k</span>
+        </button>
+
+        <button onclick="openFolder('health')" class="w-full group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-rose-500/15 border border-transparent hover:border-rose-500/40 transition-all">
+          <div class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_#f43f5e]"></span>
+            <i class="ph-duotone ph-heartbeat text-lg text-rose-400"></i>
+            <span class="sidebar-label-group text-xs font-medium text-slate-200 group-hover:text-white">Health</span>
+          </div>
+          <span class="sidebar-label-group text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300">68 bpm</span>
+        </button>
+
+        <div class="my-3 border-t border-white/5"></div>
+
+        <!-- AI & Settings Expandable Sections inside Sidebar -->
+        <div class="sidebar-label-group px-2 pb-1.5 text-[10px] font-mono uppercase tracking-widest text-purple-400/70">
+          System & Neural
+        </div>
+
+        <!-- AI NEURAL COPILOT ACCORDION / DRAWER TRIGGER -->
+        <div class="rounded-xl bg-gradient-to-br from-purple-950/50 via-[#121226] to-fuchsia-950/30 border border-purple-500/40 overflow-hidden shadow-[0_0_20px_rgba(168,85,247,0.15)]">
+          <button onclick="toggleSidebarAccordion('aiAccordion')" class="w-full flex items-center justify-between px-3 py-2.5 text-left hover:bg-purple-500/10 transition">
+            <div class="flex items-center gap-2.5">
+              <div class="relative flex items-center justify-center">
+                <i class="ph-fill ph-sparkle text-lg text-purple-400"></i>
+                <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-ping"></span>
+              </div>
+              <span class="sidebar-label-group text-xs font-semibold text-purple-200 tracking-wide">AI Neural Core</span>
+            </div>
+            <i id="aiAccordionArrow" class="sidebar-label-group ph ph-caret-down text-xs text-purple-300 transition-transform duration-200"></i>
+          </button>
+
+          <div id="aiAccordion" class="sidebar-label-group px-3 pb-3 pt-1 space-y-2.5 border-t border-purple-500/20">
+            <div id="aiMiniResponse" class="text-[11px] leading-relaxed text-purple-200/90 bg-black/40 p-2.5 rounded-lg border border-purple-500/20 font-mono">
+              "Sleep efficiency rose +9% this week. Ready to optimize your deep work blocks."
+            </div>
+            <div class="flex flex-wrap gap-1">
+              <button onclick="triggerAiInsight('optimize')" class="text-[10px] px-2 py-1 rounded-md bg-purple-500/20 hover:bg-purple-500/35 text-purple-200 border border-purple-500/30 transition">
+                ⚡ Optimize Day
+              </button>
+              <button onclick="triggerAiInsight('finance')" class="text-[10px] px-2 py-1 rounded-md bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/30 transition">
+                💹 Audit Spend
+              </button>
+              <button onclick="triggerAiInsight('recovery')" class="text-[10px] px-2 py-1 rounded-md bg-rose-500/15 hover:bg-rose-500/30 text-rose-200 border border-rose-500/30 transition">
+                ❤️ Bio Status
+              </button>
+            </div>
+            <div class="relative">
+              <input id="aiQuickInput" type="text" placeholder="Ask Aether AI..." 
+                onkeydown="if(event.key==='Enter') sendAiPrompt()"
+                class="w-full bg-black/60 border border-purple-500/40 rounded-lg pl-2.5 pr-7 py-1.5 text-[11px] text-white placeholder-slate-500 focus:outline-none focus:border-purple-400" />
+              <button onclick="sendAiPrompt()" class="absolute right-1.5 top-1/2 -translate-y-1/2 text-purple-400 hover:text-purple-200">
+                <i class="ph-fill ph-paper-plane-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETTINGS ACCORDION IN SIDEBAR -->
+        <div class="rounded-xl bg-[#101020]/90 border border-white/10 overflow-hidden mt-2">
+          <button onclick="toggleSidebarAccordion('settingsAccordion')" class="w-full flex items-center justify-between px-3 py-2.5 text-left hover:bg-white/5 transition">
+            <div class="flex items-center gap-2.5">
+              <i class="ph-duotone ph-sliders-horizontal text-lg text-fuchsia-400"></i>
+              <span class="sidebar-label-group text-xs font-semibold text-slate-200 tracking-wide">Settings & LED</span>
+            </div>
+            <i id="settingsAccordionArrow" class="sidebar-label-group ph ph-caret-down text-xs text-slate-400 transition-transform duration-200 rotate-180"></i>
+          </button>
+
+          <div id="settingsAccordion" class="sidebar-label-group hidden px-3 pb-3 pt-2 space-y-3 border-t border-white/10 text-xs">
+            <!-- LED Glow Intensity Slider -->
+            <div>
+              <div class="flex justify-between text-[10px] font-mono text-slate-400 mb-1">
+                <span>LED GLOW POWER</span>
+                <span id="glowValueLabel" class="text-purple-400">100%</span>
+              </div>
+              <input type="range" min="0.2" max="1.6" step="0.1" value="1" 
+                oninput="updateLedIntensity(this.value)"
+                class="w-full accent-purple-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg" />
+            </div>
+
+            <!-- Pulse Speed -->
+            <div>
+              <div class="flex justify-between text-[10px] font-mono text-slate-400 mb-1">
+                <span>LED PULSE SPEED</span>
+                <span id="speedValueLabel" class="text-cyan-400">Normal</span>
+              </div>
+              <div class="grid grid-cols-3 gap-1">
+                <button onclick="updateLedSpeed('6s', 'Calm')" class="px-2 py-1 rounded bg-white/5 hover:bg-purple-500/20 text-[10px] border border-white/10">Calm</button>
+                <button onclick="updateLedSpeed('3.5s', 'Normal')" class="px-2 py-1 rounded bg-purple-500/25 text-purple-200 text-[10px] border border-purple-500/40">Normal</button>
+                <button onclick="updateLedSpeed('1.4s', 'Hyper')" class="px-2 py-1 rounded bg-white/5 hover:bg-purple-500/20 text-[10px] border border-white/10">Hyper</button>
+              </div>
+            </div>
+
+            <!-- Privacy Mode Toggle -->
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-[11px] text-slate-300">Privacy Blur</span>
+              <button id="privacyToggleBtn" onclick="togglePrivacyMode()" class="w-9 h-5 rounded-full bg-slate-800 border border-white/15 relative transition-colors">
+                <span id="privacyKnob" class="w-3.5 h-3.5 rounded-full bg-slate-400 absolute left-0.5 top-0.5 transition-transform"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Footer Status -->
+      <div class="p-3 border-t border-white/5 bg-black/30 flex items-center justify-between">
+        <div class="flex items-center gap-2.5 overflow-hidden">
+          <div class="relative shrink-0">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-500 flex items-center justify-center text-xs font-bold text-white shadow-[0_0_12px_#a855f7]">
+              NX
+            </div>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#090913] absolute -bottom-0.5 -right-0.5"></span>
+          </div>
+          <div class="sidebar-label-group truncate">
+            <p class="text-xs font-semibold text-white leading-none">Alex Mercer</p>
+            <p class="text-[10px] font-mono text-purple-400 mt-0.5">ENCRYPTED // LOCAL</p>
+          </div>
+        </div>
+        <button onclick="toggleSidebarAccordion('settingsAccordion')" class="sidebar-label-group p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition" title="Quick LED Settings">
+          <i class="ph ph-gear-six text-base"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN BENTO DASHBOARD AREA ================= -->
+    <main id="dashboardMain" class="flex-1 h-full flex flex-col overflow-y-auto lg:overflow-hidden p-3 sm:p-5 transition-all duration-300">
+      
+      <!-- TOP COMMAND BAR -->
+      <header class="flex flex-wrap items-center justify-between gap-3 mb-4 shrink-0">
+        <div class="flex items-center gap-3">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <span class="led-dot" style="--module-color: #a855f7;"></span>
+              <h2 class="led-title text-lg sm:text-xl font-bold tracking-wider uppercase text-white" style="--module-color: #a855f7;">
+                LIFE COMMAND MATRIX
+              </h2>
+            </div>
+            <div class="led-strip w-44 mt-1" style="--module-color: #a855f7;"></div>
+          </div>
+        </div>
+
+        <!-- Center Status Pills -->
+        <div class="hidden xl:flex items-center gap-2 bg-[#0e0e1c]/90 border border-purple-500/25 px-3.5 py-1.5 rounded-full shadow-[0_0_20px_rgba(168,85,247,0.12)]">
+          <span class="text-[11px] font-mono text-purple-300 flex items-center gap-1.5">
+            <i class="ph-fill ph-lightning text-amber-400"></i> SYSTEM SYNC: 98.4%
+          </span>
+          <span class="text-slate-600">|</span>
+          <span class="text-[11px] font-mono text-cyan-300">FOCUS STREAK: 14 DAYS</span>
+          <span class="text-slate-600">|</span>
+          <span class="text-[11px] font-mono text-rose-300">HRV: 74 ms</span>
+        </div>
+
+        <!-- Right Clock & Quick Folder Hint -->
+        <div class="flex items-center gap-3">
+          <div class="text-right font-mono">
+            <div id="liveClock" class="text-sm sm:text-base font-bold text-white tracking-wider">21:42:08</div>
+            <div class="text-[10px] text-purple-400 uppercase tracking-widest">Click any module to open folder</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ================= 6-MODULE BENTO GRID ================= -->
+      <section class="flex-1 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:grid-rows-2 min-h-0">
+
+        <!-- 1. TASKS CARD (ELECTRIC PURPLE #a855f7) -->
+        <article onclick="openFolder('tasks')" style="--module-color: #a855f7;"
+          class="bento-card cursor-pointer p-4 flex flex-col justify-between group overflow-hidden">
+          <div class="folder-ear"></div>
+
+          <!-- Header with Animated LED Title -->
+          <div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/50 flex items-center justify-center text-purple-400 shadow-[0_0_12px_rgba(168,85,247,0.35)]">
+                  <i class="ph-bold ph-check-square-offset text-lg"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="led-title text-sm sm:text-base font-bold uppercase text-purple-100">TASKS</h3>
+                    <span class="led-dot"></span>
+                  </div>
+                  <div class="led-strip w-20 mt-0.5"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                  4/6 Done
+                </span>
+                <span class="w-7 h-7 rounded-lg bg-white/5 group-hover:bg-purple-500/25 border border-white/10 group-hover:border-purple-400 flex items-center justify-center text-slate-400 group-hover:text-purple-200 transition">
+                  <i class="ph-bold ph-folder-open text-sm"></i>
+                </span>
+              </div>
+            </div>
+
+            <!-- Task List Preview (stopPropagation on checkbox click so user can toggle directly or open folder) -->
+            <div class="mt-3.5 space-y-2">
+              <div onclick="event.stopPropagation(); toggleQuickTask(this)" class="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-purple-500/30 hover:border-purple-400 transition">
+                <div class="flex items-center gap-2.5 truncate">
+                  <span class="task-box w-4 h-4 rounded border border-purple-400 flex items-center justify-center bg-purple-500/20 text-purple-300">
+                    <i class="ph-bold ph-check text-[10px]"></i>
+                  </span>
+                  <span class="task-text text-xs text-slate-400 line-through truncate">Ship Neural UI Architecture v4</span>
+                </div>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">HIGH</span>
+              </div>
+
+              <div onclick="event.stopPropagation(); toggleQuickTask(this)" class="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/10 hover:border-purple-400 transition">
+                <div class="flex items-center gap-2.5 truncate">
+                  <span class="task-box w-4 h-4 rounded border border-purple-400/60 flex items-center justify-center text-transparent">
+                    <i class="ph-bold ph-check text-[10px]"></i>
+                  </span>
+                  <span class="task-text text-xs text-slate-100 truncate">Review Q4 Investment Portfolio</span>
+                </div>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-fuchsia-500/20 text-fuchsia-300">URGENT</span>
+              </div>
+
+              <div onclick="event.stopPropagation(); toggleQuickTask(this)" class="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/10 hover:border-purple-400 transition">
+                <div class="flex items-center gap-2.5 truncate">
+                  <span class="task-box w-4 h-4 rounded border border-purple-400/60 flex items-center justify-center text-transparent">
+                    <i class="ph-bold ph-check text-[10px]"></i>
+                  </span>
+                  <span class="task-text text-xs text-slate-100 truncate">Zero-Inbox & Deep Work Sprint</span>
+                </div>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">CORE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Mini Velocity Bar & Sparkline -->
+          <div class="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between">
+            <div class="w-2/3">
+              <div class="flex justify-between text-[10px] font-mono text-slate-400 mb-1">
+                <span>SPRINT VELOCITY</span>
+                <span class="text-purple-300">68%</span>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800/90 rounded-full overflow-hidden">
+                <div class="h-full w-[68%] bg-gradient-to-r from-purple-600 to-fuchsia-400 rounded-full shadow-[0_0_10px_#a855f7]"></div>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono text-purple-300 group-hover:translate-x-0.5 transition flex items-center gap-1">
+              Expand <i class="ph-bold ph-arrow-up-right"></i>
+            </span>
+          </div>
+        </article>
+
+        <!-- 2. CALENDAR CARD (NEON CYAN #06b6d4) -->
+        <article onclick="openFolder('calendar')" style="--module-color: #06b6d4;"
+          class="bento-card cursor-pointer p-4 flex flex-col justify-between group overflow-hidden">
+          <div class="folder-ear"></div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/50 flex items-center justify-center text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.35)]">
+                  <i class="ph-bold ph-calendar-blank text-lg"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="led-title text-sm sm:text-base font-bold uppercase text-cyan-100">CALENDAR</h3>
+                    <span class="led-dot"></span>
+                  </div>
+                  <div class="led-strip w-24 mt-0.5"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                  NOV 2026
+                </span>
+                <span class="w-7 h-7 rounded-lg bg-white/5 group-hover:bg-cyan-500/25 border border-white/10 group-hover:border-cyan-400 flex items-center justify-center text-slate-400 group-hover:text-cyan-200 transition">
+                  <i class="ph-bold ph-folder-open text-sm"></i>
+                </span>
+              </div>
+            </div>
+
+            <!-- Compact Neon Week Strip + Upcoming Timeline -->
+            <div class="grid grid-cols-7 gap-1 mt-3 text-center font-mono text-[10px]">
+              <div class="p-1 rounded bg-white/5 text-slate-400">M<br><span class="text-white">02</span></div>
+              <div class="p-1 rounded bg-white/5 text-slate-400">T<br><span class="text-white">03</span></div>
+              <div class="p-1 rounded bg-cyan-500/25 border border-cyan-400 text-cyan-200 shadow-[0_0_10px_rgba(6,182,212,0.4)] font-bold">W<br><span>04</span></div>
+              <div class="p-1 rounded bg-white/5 text-slate-400">T<br><span class="text-white">05</span></div>
+              <div class="p-1 rounded bg-purple-500/20 border border-purple-500/40 text-purple-200">F<br><span>06</span></div>
+              <div class="p-1 rounded bg-white/5 text-slate-400">S<br><span class="text-white">07</span></div>
+              <div class="p-1 rounded bg-white/5 text-slate-400">S<br><span class="text-white">08</span></div>
+            </div>
+
+            <div class="mt-3 space-y-1.5">
+              <div class="flex items-center gap-2.5 p-2 rounded-lg bg-black/40 border-l-2 border-cyan-400">
+                <span class="text-[10px] font-mono text-cyan-300 shrink-0">14:00</span>
+                <p class="text-xs text-slate-100 truncate">Product Design Sync // Holo-Room</p>
+              </div>
+              <div class="flex items-center gap-2.5 p-2 rounded-lg bg-black/40 border-l-2 border-purple-400">
+                <span class="text-[10px] font-mono text-purple-300 shrink-0">18:30</span>
+                <p class="text-xs text-slate-100 truncate">Hypertrophy Session + Cryo</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between text-[10px] font-mono">
+            <span class="text-cyan-300 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span> Next event in 42m
+            </span>
+            <span class="text-cyan-300 group-hover:translate-x-0.5 transition flex items-center gap-1">
+              Open Schedule <i class="ph-bold ph-arrow-up-right"></i>
+            </span>
+          </div>
+        </article>
+
+        <!-- 3. GOALS CARD (NEON MAGENTA/PINK #ec4899) -->
+        <article onclick="openFolder('goals')" style="--module-color: #ec4899;"
+          class="bento-card cursor-pointer p-4 flex flex-col justify-between group overflow-hidden">
+          <div class="folder-ear"></div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-pink-500/15 border border-pink-500/50 flex items-center justify-center text-pink-400 shadow-[0_0_12px_rgba(236,72,153,0.35)]">
+                  <i class="ph-bold ph-target text-lg"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="led-title text-sm sm:text-base font-bold uppercase text-pink-100">GOALS</h3>
+                    <span class="led-dot"></span>
+                  </div>
+                  <div class="led-strip w-20 mt-0.5"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40">
+                  Q4 VISION
+                </span>
+                <span class="w-7 h-7 rounded-lg bg-white/5 group-hover:bg-pink-500/25 border border-white/10 group-hover:border-pink-400 flex items-center justify-center text-slate-400 group-hover:text-pink-200 transition">
+                  <i class="ph-bold ph-folder-open text-sm"></i>
+                </span>
+              </div>
+            </div>
+
+            <!-- Neon Radial Gauges + Milestones -->
+            <div class="mt-3.5 grid grid-cols-3 gap-2 items-center">
+              <!-- Ring 1 -->
+              <div class="flex flex-col items-center p-2 rounded-xl bg-black/35 border border-white/5">
+                <div class="relative w-14 h-14 flex items-center justify-center">
+                  <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                    <path class="text-slate-800" stroke-width="3.2" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    <path class="text-pink-500 drop-shadow-[0_0_6px_#ec4899]" stroke-dasharray="82, 100" stroke-width="3.2" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  </svg>
+                  <span class="absolute text-xs font-mono font-bold text-white">82%</span>
+                </div>
+                <span class="text-[10px] font-medium text-slate-300 mt-1">SaaS ARR</span>
+              </div>
+
+              <!-- Ring 2 -->
+              <div class="flex flex-col items-center p-2 rounded-xl bg-black/35 border border-white/5">
+                <div class="relative w-14 h-14 flex items-center justify-center">
+                  <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                    <path class="text-slate-800" stroke-width="3.2" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    <path class="text-purple-400 drop-shadow-[0_0_6px_#a855f7]" stroke-dasharray="65, 100" stroke-width="3.2" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  </svg>
+                  <span class="absolute text-xs font-mono font-bold text-white">65%</span>
+                </div>
+                <span class="text-[10px] font-medium text-slate-300 mt-1">10% Bodyfat</span>
+              </div>
+
+              <!-- Ring 3 -->
+              <div class="flex flex-col items-center p-2 rounded-xl bg-black/35 border border-white/5">
+                <div class="relative w-14 h-14 flex items-center justify-center">
+                  <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                    <path class="text-slate-800" stroke-width="3.2" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    <path class="text-cyan-400 drop-shadow-[0_0_6px_#06b6d4]" stroke-dasharray="90, 100" stroke-width="3.2" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  </svg>
+                  <span class="absolute text-xs font-mono font-bold text-white">90%</span>
+                </div>
+                <span class="text-[10px] font-medium text-slate-300 mt-1">24 Books</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between text-[10px] font-mono">
+            <span class="text-pink-300">3 Milestones on track</span>
+            <span class="text-pink-300 group-hover:translate-x-0.5 transition flex items-center gap-1">
+              Vision Board <i class="ph-bold ph-arrow-up-right"></i>
+            </span>
+          </div>
+        </article>
+
+        <!-- 4. ROUTINE TODAY CARD (NEON AMBER #f59e0b) -->
+        <article onclick="openFolder('routine')" style="--module-color: #f59e0b;"
+          class="bento-card cursor-pointer p-4 flex flex-col justify-between group overflow-hidden">
+          <div class="folder-ear"></div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/50 flex items-center justify-center text-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.35)]">
+                  <i class="ph-bold ph-sun-horizon text-lg"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="led-title text-sm sm:text-base font-bold uppercase text-amber-100">ROUTINE TODAY</h3>
+                    <span class="led-dot"></span>
+                  </div>
+                  <div class="led-strip w-32 mt-0.5"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                  🔥 14d Streak
+                </span>
+                <span class="w-7 h-7 rounded-lg bg-white/5 group-hover:bg-amber-500/25 border border-white/10 group-hover:border-amber-400 flex items-center justify-center text-slate-400 group-hover:text-amber-200 transition">
+                  <i class="ph-bold ph-folder-open text-sm"></i>
+                </span>
+              </div>
+            </div>
+
+            <!-- Protocol Habit Pills -->
+            <div class="mt-3.5 grid grid-cols-2 gap-2">
+              <div class="p-2 rounded-lg bg-amber-500/15 border border-amber-500/40 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <i class="ph-fill ph-check-circle text-amber-400 text-sm"></i>
+                  <span class="text-xs text-amber-100">06:30 Sunlight</span>
+                </div>
+                <span class="text-[9px] font-mono text-amber-300">DONE</span>
+              </div>
+
+              <div class="p-2 rounded-lg bg-amber-500/15 border border-amber-500/40 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <i class="ph-fill ph-check-circle text-amber-400 text-sm"></i>
+                  <span class="text-xs text-amber-100">Cold Plunge 3m</span>
+                </div>
+                <span class="text-[9px] font-mono text-amber-300">DONE</span>
+              </div>
+
+              <div class="p-2 rounded-lg bg-purple-500/15 border border-purple-500/40 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <i class="ph-fill ph-clock-countdown text-purple-300 text-sm"></i>
+                  <span class="text-xs text-slate-100">90m Deep Work</span>
+                </div>
+                <span class="text-[9px] font-mono text-purple-300">ACTIVE</span>
+              </div>
+
+              <div class="p-2 rounded-lg bg-black/40 border border-white/10 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <i class="ph ph-circle text-slate-500 text-sm"></i>
+                  <span class="text-xs text-slate-300">No Screens 22h</span>
+                </div>
+                <span class="text-[9px] font-mono text-slate-500">22:00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bio-Rhythm Energy Wave -->
+          <div class="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-mono text-slate-400">DAILY PROTOCOL:</span>
+              <span class="text-xs font-mono font-bold text-amber-300">75% COMPLETED</span>
+            </div>
+            <span class="text-[10px] font-mono text-amber-300 group-hover:translate-x-0.5 transition flex items-center gap-1">
+              Habit Matrix <i class="ph-bold ph-arrow-up-right"></i>
+            </span>
+          </div>
+        </article>
+
+        <!-- 5. BUDGET CARD (NEON EMERALD #10b981) -->
+        <article onclick="openFolder('budget')" style="--module-color: #10b981;"
+          class="bento-card cursor-pointer p-4 flex flex-col justify-between group overflow-hidden">
+          <div class="folder-ear"></div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/50 flex items-center justify-center text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.35)]">
+                  <i class="ph-bold ph-chart-line-up text-lg"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="led-title text-sm sm:text-base font-bold uppercase text-emerald-100">BUDGET</h3>
+                    <span class="led-dot"></span>
+                  </div>
+                  <div class="led-strip w-20 mt-0.5"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 sensitive-data">
+                  +18.4% MoM
+                </span>
+                <span class="w-7 h-7 rounded-lg bg-white/5 group-hover:bg-emerald-500/25 border border-white/10 group-hover:border-emerald-400 flex items-center justify-center text-slate-400 group-hover:text-emerald-200 transition">
+                  <i class="ph-bold ph-folder-open text-sm"></i>
+                </span>
+              </div>
+            </div>
+
+            <!-- Financial Metrics + Neon SVG Area Chart -->
+            <div class="mt-3 flex items-baseline justify-between sensitive-data">
+              <div>
+                <p class="text-[10px] font-mono uppercase text-slate-400">Net Monthly Cashflow</p>
+                <p class="text-lg font-mono font-bold text-white">$8,420 <span class="text-xs text-emerald-400 font-normal">/ $3,150 spent</span></p>
+              </div>
+              <div class="text-right">
+                <p class="text-[10px] font-mono text-slate-400">SAVINGS RATE</p>
+                <p class="text-sm font-mono font-bold text-emerald-400">62.5%</p>
+              </div>
+            </div>
+
+            <!-- Neon SVG Cashflow Area Graph -->
+            <div class="mt-2 h-16 w-full relative">
+              <svg class="w-full h-full overflow-visible" viewBox="0 0 260 60" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="emeraldGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#10b981" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,48 Q35,42 65,30 T130,26 T195,14 T260,8 L260,60 L0,60 Z" fill="url(#emeraldGrad)" />
+                <path d="M0,48 Q35,42 65,30 T130,26 T195,14 T260,8" fill="none" stroke="#10b981" stroke-width="2.5" class="drop-shadow-[0_0_8px_#10b981]" />
+                <!-- Purple Comparison Line (Budget Limit) -->
+                <path d="M0,38 L260,38" fill="none" stroke="#a855f7" stroke-dasharray="4 4" stroke-width="1.2" opacity="0.7" />
+                <circle cx="260" cy="8" r="3.5" fill="#fff" class="drop-shadow-[0_0_8px_#10b981]" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="mt-2 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] font-mono">
+            <span class="text-emerald-300">Safe to spend: <strong class="sensitive-data">$1,850</strong></span>
+            <span class="text-emerald-300 group-hover:translate-x-0.5 transition flex items-center gap-1">
+              Analytics <i class="ph-bold ph-arrow-up-right"></i>
+            </span>
+          </div>
+        </article>
+
+        <!-- 6. HEALTH CARD (NEON CRIMSON #f43f5e - Sleep, Workout, Steps, Heart Rate/BPM) -->
+        <article onclick="openFolder('health')" style="--module-color: #f43f5e;"
+          class="bento-card cursor-pointer p-4 flex flex-col justify-between group overflow-hidden">
+          <div class="folder-ear"></div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-rose-500/15 border border-rose-500/50 flex items-center justify-center text-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.35)]">
+                  <i class="ph-bold ph-heartbeat text-lg"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="led-title text-sm sm:text-base font-bold uppercase text-rose-100">HEALTH</h3>
+                    <span class="led-dot"></span>
+                  </div>
+                  <div class="led-strip w-20 mt-0.5"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping"></span> 68 BPM
+                </span>
+                <span class="w-7 h-7 rounded-lg bg-white/5 group-hover:bg-rose-500/25 border border-white/10 group-hover:border-rose-400 flex items-center justify-center text-slate-400 group-hover:text-rose-200 transition">
+                  <i class="ph-bold ph-folder-open text-sm"></i>
+                </span>
+              </div>
+            </div>
+
+            <!-- 4 Biometric Pillars: Sleep, Workout, Steps, Pulsaciones (BPM) -->
+            <div class="grid grid-cols-4 gap-1.5 mt-3 text-center">
+              <div class="p-1.5 rounded-lg bg-black/40 border border-white/5">
+                <i class="ph-duotone ph-moon-stars text-purple-400 text-sm"></i>
+                <p class="text-[11px] font-mono font-bold text-white mt-0.5">7h 48m</p>
+                <p class="text-[9px] text-slate-400">Sleep 92%</p>
+              </div>
+              <div class="p-1.5 rounded-lg bg-black/40 border border-white/5">
+                <i class="ph-duotone ph-barbell text-amber-400 text-sm"></i>
+                <p class="text-[11px] font-mono font-bold text-white mt-0.5">640 kcal</p>
+                <p class="text-[9px] text-slate-400">Push Day</p>
+              </div>
+              <div class="p-1.5 rounded-lg bg-black/40 border border-white/5">
+                <i class="ph-duotone ph-footprints text-cyan-400 text-sm"></i>
+                <p class="text-[11px] font-mono font-bold text-white mt-0.5">11,420</p>
+                <p class="text-[9px] text-slate-400">Steps</p>
+              </div>
+              <div class="p-1.5 rounded-lg bg-black/40 border border-rose-500/30">
+                <i class="ph-duotone ph-activity text-rose-400 text-sm"></i>
+                <p class="text-[11px] font-mono font-bold text-rose-300 mt-0.5">68 bpm</p>
+                <p class="text-[9px] text-slate-400">Resting</p>
+              </div>
+            </div>
+
+            <!-- Animated Neon ECG Pulse Line -->
+            <div class="mt-2.5 h-10 w-full bg-black/40 rounded-lg border border-rose-500/20 px-2 flex items-center overflow-hidden">
+              <svg class="w-full h-8 overflow-visible" viewBox="0 0 300 40" preserveAspectRatio="none">
+                <path class="ecg-path drop-shadow-[0_0_8px_#f43f5e]" fill="none" stroke="#f43f5e" stroke-width="2"
+                  d="M0,20 L40,20 L48,12 L55,28 L64,4 L72,36 L80,16 L88,20 L145,20 L153,12 L160,28 L169,4 L177,36 L185,16 L193,20 L250,20 L258,12 L265,28 L274,4 L282,36 L290,16 L300,20" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="mt-2 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] font-mono">
+            <span class="text-rose-300">Recovery Readiness: <strong>94% Peak</strong></span>
+            <span class="text-rose-300 group-hover:translate-x-0.5 transition flex items-center gap-1">
+              Biometrics <i class="ph-bold ph-arrow-up-right"></i>
+            </span>
+          </div>
+        </article>
+
+      </section>
+    </main>
+
+    <!-- ================= FOLDER EXPANSION OVERLAY MODAL ================= -->
+    <!-- Opens like an expanded folder over the main dashboard without covering it completely -->
+    <div id="folderOverlayBackdrop" onclick="closeFolderOnBackdrop(event)"
+      class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-8 md:p-12 bg-black/55 backdrop-blur-md transition-opacity duration-300">
+      
+      <!-- Folder Container (82% width/height max so the main dashboard remains visible around the perimeter) -->
+      <div id="folderModalContainer" style="--module-color: #a855f7;"
+        class="w-full max-w-5xl max-h-[84vh] flex flex-col transition-all duration-300 transform scale-95 opacity-0">
+        
+        <!-- Top Folder Tab Bar (Gives the physical futuristic folder geometry) -->
+        <div class="flex items-end justify-between pr-2">
+          <div id="folderTabEar" class="folder-modal-tab">
+            <span class="led-dot"></span>
+            <i id="folderModalIcon" class="ph-bold ph-folder-open text-lg text-purple-300"></i>
+            <span id="folderModalCode" class="text-xs font-mono tracking-widest uppercase text-slate-300">FOLDER // 01</span>
+          </div>
+
+          <!-- Quick Module Switcher Tabs on the top edge of the folder -->
+          <div class="hidden sm:flex items-center gap-1.5 mb-1.5 bg-[#0c0c18]/90 px-2.5 py-1 rounded-xl border border-white/10">
+            <button onclick="openFolder('tasks')" class="px-2 py-1 rounded-lg text-[10px] font-mono hover:bg-purple-500/20 text-purple-300 transition">Tasks</button>
+            <button onclick="openFolder('calendar')" class="px-2 py-1 rounded-lg text-[10px] font-mono hover:bg-cyan-500/20 text-cyan-300 transition">Calendar</button>
+            <button onclick="openFolder('goals')" class="px-2 py-1 rounded-lg text-[10px] font-mono hover:bg-pink-500/20 text-pink-300 transition">Goals</button>
+            <button onclick="openFolder('routine')" class="px-2 py-1 rounded-lg text-[10px] font-mono hover:bg-amber-500/20 text-amber-300 transition">Routine</button>
+            <button onclick="openFolder('budget')" class="px-2 py-1 rounded-lg text-[10px] font-mono hover:bg-emerald-500/20 text-emerald-300 transition">Budget</button>
+            <button onclick="openFolder('health')" class="px-2 py-1 rounded-lg text-[10px] font-mono hover:bg-rose-500/20 text-rose-300 transition">Health</button>
+          </div>
+        </div>
+
+        <!-- Main Folder Body -->
+        <div class="folder-modal-shell rounded-b-2xl rounded-tr-2xl p-5 sm:p-7 overflow-y-auto flex-1 flex flex-col justify-between">
+          
+          <!-- Dynamic Folder Header -->
+          <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10">
+            <div>
+              <div class="flex items-center gap-3">
+                <h2 id="folderModalTitle" class="led-title text-2xl sm:text-3xl font-bold uppercase text-white">TASKS</h2>
+                <span id="folderModalBadge" class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-200">
+                  ACTIVE SPRINT
+                </span>
+              </div>
+              <div class="led-strip w-56 mt-1.5"></div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="closeFolder()" 
+                class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-rose-500/20 border border-white/15 hover:border-rose-500/50 text-xs font-mono text-slate-200 hover:text-rose-200 transition">
+                <i class="ph-bold ph-x text-sm"></i> Close Folder [ESC]
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Folder Content Injected Here -->
+          <div id="folderModalBody" class="my-5 flex-1"></div>
+
+          <!-- Folder Footer Status -->
+          <div class="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-400">
+            <span>BACKGROUND DASHBOARD REMAINS LIVE • CLICK OUTSIDE FOLDER TO MINIMIZE</span>
+            <span id="folderFooterStatus" class="text-purple-300">LED TELEMETRY ONLINE</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= APPLICATION JAVASCRIPT ================= -->
+  <script>
+    // Live Clock
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
+      document.getElementById('liveClock').textContent = timeStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Quick Checkbox Toggle on Main Dashboard
+    function toggleQuickTask(rowEl) {
+      const box = rowEl.querySelector('.task-box');
+      const text = rowEl.querySelector('.task-text');
+      const isChecked = text.classList.contains('line-through');
+
+      if (isChecked) {
+        text.classList.remove('line-through', 'text-slate-400');
+        text.classList.add('text-slate-100');
+        box.classList.remove('bg-purple-500/20', 'text-purple-300');
+        box.classList.add('text-transparent');
+      } else {
+        text.classList.add('line-through', 'text-slate-400');
+        text.classList.remove('text-slate-100');
+        box.classList.add('bg-purple-500/20', 'text-purple-300');
+        box.classList.remove('text-transparent');
+      }
+    }
+
+    // Sidebar States: 'expanded' | 'compact' | 'hidden'
+    let currentSidebarState = 'expanded';
+
+    function setSidebarState(state) {
+      const sidebar = document.getElementById('appSidebar');
+      const restoreBtn = document.getElementById('restoreSidebarBtn');
+      const labels = document.querySelectorAll('.sidebar-label-group');
+      const compactIcon = document.getElementById('compactIcon');
+      currentSidebarState = state;
+
+      if (state === 'hidden') {
+        sidebar.classList.add('w-0', 'opacity-0', 'pointer-events-none', '-translate-x-full');
+        sidebar.classList.remove('w-64', 'w-20', 'p-4');
+        restoreBtn.classList.remove('hidden');
+        restoreBtn.classList.add('flex');
+      } else if (state === 'compact') {
+        sidebar.classList.remove('w-64', 'w-0', 'opacity-0', 'pointer-events-none', '-translate-x-full');
+        sidebar.classList.add('w-20');
+        labels.forEach(el => el.classList.add('hidden'));
+        restoreBtn.classList.add('hidden');
+        restoreBtn.classList.remove('flex');
+        compactIcon.className = 'ph ph-arrows-out-line-horizontal text-base';
+      } else {
+        sidebar.classList.remove('w-20', 'w-0', 'opacity-0', 'pointer-events-none', '-translate-x-full');
+        sidebar.classList.add('w-64');
+        labels.forEach(el => el.classList.remove('hidden'));
+        // Keep settings accordion closed if it was closed
+        restoreBtn.classList.add('hidden');
+        restoreBtn.classList.remove('flex');
+        compactIcon.className = 'ph ph-arrows-in-line-horizontal text-base';
+      }
+    }
+
+    function toggleSidebarCompact() {
+      if (currentSidebarState === 'expanded') {
+        setSidebarState('compact');
+      } else {
+        setSidebarState('expanded');
+      }
+    }
+
+    // Sidebar Accordions (AI & Settings)
+    function toggleSidebarAccordion(id) {
+      if (currentSidebarState === 'compact') {
+        setSidebarState('expanded');
+      }
+      const panel = document.getElementById(id);
+      const arrow = document.getElementById(id + 'Arrow');
+      if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        if (arrow) arrow.classList.remove('rotate-180');
+      } else {
+        panel.classList.add('hidden');
+        if (arrow) arrow.classList.add('rotate-180');
+      }
+    }
+
+    // AI Copilot Interactive Responses
+    function triggerAiInsight(type) {
+      const box = document.getElementById('aiMiniResponse');
+      const messages = {
+        optimize: '⚡ AI SCHEDULE: Shifted "Deep Work Sprint" to 09:00 AM peak dopamine window. Tasks completion probability +24%.',
+        finance: '💹 AI BUDGET AUDIT: Subscriptions reduced by $64/mo. Projected Q4 investment surplus: +$3,420.',
+        recovery: '❤️ AI BIO-SCAN: Resting HR at 68 bpm & 7h48m sleep indicates 94% CNS recovery. Cleared for high-load training.'
+      };
+      box.innerHTML = `<span class="text-fuchsia-300">[NEURAL SYNC]</span> ${messages[type]}`;
+    }
+
+    function sendAiPrompt() {
+      const input = document.getElementById('aiQuickInput');
+      const box = document.getElementById('aiMiniResponse');
+      if (!input.value.trim()) return;
+      const query = input.value.trim();
+      box.innerHTML = `<span class="text-purple-400">&gt; ${query}</span><br><span class="text-cyan-300">Aether AI:</span> Cross-referencing your Tasks, Health HRV, and Budget telemetry. Optimal path locked.`;
+      input.value = '';
+    }
+
+    // Settings Controls: LED Glow & Speed & Privacy
+    function updateLedIntensity(val) {
+      document.documentElement.style.setProperty('--led-intensity', val);
+      document.getElementById('glowValueLabel').textContent = Math.round(val * 100) + '%';
+    }
+
+    function updateLedSpeed(speedStr, label) {
+      document.documentElement.style.setProperty('--led-speed', speedStr);
+      document.getElementById('speedValueLabel').textContent = label;
+    }
+
+    let privacyActive = false;
+    function togglePrivacyMode() {
+      privacyActive = !privacyActive;
+      const body = document.body;
+      const btn = document.getElementById('privacyToggleBtn');
+      const knob = document.getElementById('privacyKnob');
+      if (privacyActive) {
+        body.classList.add('privacy-blur');
+        btn.classList.add('bg-purple-600/50', 'border-purple-400');
+        knob.classList.add('translate-x-4', 'bg-purple-300');
+      } else {
+        body.classList.remove('privacy-blur');
+        btn.classList.remove('bg-purple-600/50', 'border-purple-400');
+        knob.classList.remove('translate-x-4', 'bg-purple-300');
+      }
+    }
+
+    // ================= FOLDER EXPANSION OVERLAY DATA & TEMPLATES =================
+    const folderConfig = {
+      tasks: {
+        code: 'FOLDER // 01 • TASKS',
+        title: 'TASKS & SPRINT MATRIX',
+        color: '#a855f7',
+        badge: '5 ACTIVE • 82% VELOCITY',
+        icon: 'ph-check-square-offset',
+        footer: 'PURPLE LED CHANNEL // PRIORITY QUEUE SYNCED',
+        render: () => `
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <!-- Columns: Backlog, In Progress, Completed -->
+            <div class="p-4 rounded-xl bg-black/45 border border-purple-500/30 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono uppercase tracking-wider text-purple-300">Priority Queue</span>
+                <span class="text-xs font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">3</span>
+              </div>
+              <div class="space-y-2.5">
+                <div class="p-3 rounded-lg bg-[#121224] border border-purple-500/40">
+                  <span class="text-[10px] font-mono text-fuchsia-400">HIGH IMPACT</span>
+                  <p class="text-sm font-semibold text-white mt-0.5">Review Q4 Investment Portfolio</p>
+                  <p class="text-xs text-slate-400 mt-1">Rebalance ETF & crypto cold storage allocation</p>
+                </div>
+                <div class="p-3 rounded-lg bg-[#121224] border border-white/10">
+                  <span class="text-[10px] font-mono text-purple-400">DEEP WORK</span>
+                  <p class="text-sm font-semibold text-white mt-0.5">Zero-Inbox & Neural Notes Sync</p>
+                  <p class="text-xs text-slate-400 mt-1">Archive 24 threads & tag weekly knowledge</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-black/45 border border-purple-500/30 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono uppercase tracking-wider text-cyan-300">Active Focus</span>
+                <span class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">2</span>
+              </div>
+              <div class="space-y-2.5">
+                <div class="p-3 rounded-lg bg-purple-950/30 border border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                  <div class="flex justify-between text-[10px] font-mono text-purple-300">
+                    <span>POMODORO 03/04</span>
+                    <span>45m left</span>
+                  </div>
+                  <p class="text-sm font-semibold text-white mt-1">Finalize Life OS LED Architecture</p>
+                  <div class="w-full h-1.5 bg-black/60 rounded-full mt-2.5 overflow-hidden">
+                    <div class="w-3/4 h-full bg-purple-400 shadow-[0_0_10px_#a855f7]"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Weekly Output Chart -->
+            <div class="p-4 rounded-xl bg-black/45 border border-purple-500/30 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-mono uppercase tracking-wider text-purple-300">Weekly Tasks Completed</span>
+                <p class="text-2xl font-mono font-bold text-white mt-1">34 <span class="text-xs font-normal text-emerald-400">+12% vs last wk</span></p>
+                <div class="grid grid-cols-7 gap-2 items-end h-32 mt-4 pt-4 px-1">
+                  <div class="flex flex-col items-center gap-1"><div class="w-full bg-purple-500/30 border border-purple-400/50 rounded-t h-14"></div><span class="text-[10px] font-mono text-slate-400">M</span></div>
+                  <div class="flex flex-col items-center gap-1"><div class="w-full bg-purple-500/40 border border-purple-400/50 rounded-t h-20"></div><span class="text-[10px] font-mono text-slate-400">T</span></div>
+                  <div class="flex flex-col items-center gap-1"><div class="w-full bg-purple-500/60 border border-purple-400 rounded-t h-24 shadow-[0_0_12px_#a855f7]"></div><span class="text-[10px] font-mono text-white">W</span></div>
+                  <div class="flex flex-col items-center gap-1"><div class="w-full bg-purple-500/35 border border-purple-400/50 rounded-t h-16"></div><span class="text-[10px] font-mono text-slate-400">T</span></div>
+                  <div class="flex flex-col items-center gap-1"><div class="w-full bg-purple-500/50 border border-purple-400/50 rounded-t h-22"></div><span class="text-[10px] font-mono text-slate-400">F</span></div>
+                  <div class="flex flex-col items-center gap-1"><div class="w-full bg-purple-500/20 border border-purple-400/40 rounded-t h-10"></div><span class="text-[10px] font-mono text-slate-400">S</span></div>
+                  <div class="flex flex-col items-center gap-1"><div class="w-full bg-purple-500/20 border border-purple-400/40 rounded-t h-8"></div><span class="text-[10px] font-mono text-slate-400">S</span></div>
+                </div>
+              </div>
+              <div class="text-xs font-mono text-purple-300 pt-3 border-t border-white/10">Peak output day: Wednesday</div>
+            </div>
+          </div>
+        `
+      },
+
+      calendar: {
+        code: 'FOLDER // 02 • CALENDAR',
+        title: 'CHRONO SCHEDULE & TIMEBLOCKS',
+        color: '#06b6d4',
+        badge: 'NOVEMBER 2026 • SYNCED',
+        icon: 'ph-calendar-blank',
+        footer: 'CYAN LED CHANNEL // GOOGLE & ICLOUD ENCRYPTED BRIDGE',
+        render: () => `
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div class="lg:col-span-2 p-4 rounded-xl bg-black/45 border border-cyan-500/30">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-mono uppercase text-cyan-300">November 2026 Matrix</span>
+                <span class="text-xs font-mono text-slate-400">Week 45</span>
+              </div>
+              <div class="grid grid-cols-7 gap-2 text-center font-mono text-xs">
+                <div class="text-slate-500 py-1">MON</div><div class="text-slate-500 py-1">TUE</div><div class="text-slate-500 py-1">WED</div><div class="text-slate-500 py-1">THU</div><div class="text-slate-500 py-1">FRI</div><div class="text-slate-500 py-1">SAT</div><div class="text-slate-500 py-1">SUN</div>
+                ${Array.from({length: 28}, (_, i) => {
+                  const day = i + 1;
+                  const isToday = day === 4;
+                  const hasEvent = [4, 6, 11, 15, 20, 24].includes(day);
+                  return `<div class="p-2.5 rounded-xl border ${isToday ? 'bg-cyan-500/25 border-cyan-400 text-white shadow-[0_0_15px_rgba(6,182,212,0.4)] font-bold' : 'bg-white/5 border-white/5 text-slate-300'} flex flex-col items-center">
+                    <span>${day < 10 ? '0'+day : day}</span>
+                    ${hasEvent ? `<span class="w-1.5 h-1.5 rounded-full ${isToday ? 'bg-white' : 'bg-purple-400'} mt-1"></span>` : '<span class="w-1.5 h-1.5 mt-1"></span>'}
+                  </div>`;
+                }).join('')}
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-black/45 border border-cyan-500/30 space-y-3">
+              <span class="text-xs font-mono uppercase text-cyan-300">Today's Time-Blocked Agenda</span>
+              <div class="space-y-2.5">
+                <div class="p-3 rounded-lg bg-cyan-950/30 border-l-4 border-cyan-400">
+                  <span class="text-xs font-mono text-cyan-300">09:00 - 11:30</span>
+                  <p class="text-sm font-semibold text-white">Deep Architecture Sprint</p>
+                  <p class="text-xs text-slate-400">No notifications • Flow state</p>
+                </div>
+                <div class="p-3 rounded-lg bg-purple-950/30 border-l-4 border-purple-400">
+                  <span class="text-xs font-mono text-purple-300">14:00 - 15:00</span>
+                  <p class="text-sm font-semibold text-white">Product Design Sync // Holo-Room</p>
+                  <p class="text-xs text-slate-400">Review Q4 UI Milestones</p>
+                </div>
+                <div class="p-3 rounded-lg bg-rose-950/30 border-l-4 border-rose-400">
+                  <span class="text-xs font-mono text-rose-300">18:30 - 20:00</span>
+                  <p class="text-sm font-semibold text-white">Hypertrophy Session + Sauna</p>
+                  <p class="text-xs text-slate-400">Zone 2 Cardio finisher</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      goals: {
+        code: 'FOLDER // 03 • GOALS',
+        title: 'NORTH STAR GOALS & OKRs',
+        color: '#ec4899',
+        badge: '78% AGGREGATE COMPLETION',
+        icon: 'ph-target',
+        footer: 'MAGENTA LED CHANNEL // LONG-TERM TRAJECTORY LOCKED',
+        render: () => `
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="p-4 rounded-xl bg-black/45 border border-pink-500/35 space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-mono text-pink-300">FINANCIAL & CAREER</span>
+                <span class="text-sm font-mono font-bold text-white">82%</span>
+              </div>
+              <h4 class="text-base font-bold text-white">Scale Indie SaaS to $15k MRR</h4>
+              <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div class="w-[82%] h-full bg-gradient-to-r from-pink-500 to-purple-500 shadow-[0_0_12px_#ec4899]"></div>
+              </div>
+              <ul class="text-xs space-y-1.5 text-slate-300 font-mono pt-2">
+                <li>✓ Launch v4 Neon Tier</li>
+                <li>✓ Reach 180 paying pro members</li>
+                <li class="text-pink-300">→ Reduce churn below 2.1%</li>
+              </ul>
+            </div>
+
+            <div class="p-4 rounded-xl bg-black/45 border border-purple-500/35 space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-mono text-purple-300">PHYSIQUE & BIO</span>
+                <span class="text-sm font-mono font-bold text-white">65%</span>
+              </div>
+              <h4 class="text-base font-bold text-white">10% Bodyfat @ 80kg Lean</h4>
+              <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div class="w-[65%] h-full bg-gradient-to-r from-purple-500 to-cyan-400 shadow-[0_0_12px_#a855f7]"></div>
+              </div>
+              <ul class="text-xs space-y-1.5 text-slate-300 font-mono pt-2">
+                <li>✓ 4x Weekly Strength Split</li>
+                <li>✓ 180g Daily Protein Target</li>
+                <li class="text-purple-300">→ 11,000 Daily Steps Average</li>
+              </ul>
+            </div>
+
+            <div class="p-4 rounded-xl bg-black/45 border border-cyan-500/35 space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-mono text-cyan-300">INTELLECT & MIND</span>
+                <span class="text-sm font-mono font-bold text-white">90%</span>
+              </div>
+              <h4 class="text-base font-bold text-white">Read 24 High-Signal Books</h4>
+              <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div class="w-[90%] h-full bg-gradient-to-r from-cyan-400 to-emerald-400 shadow-[0_0_12px_#06b6d4]"></div>
+              </div>
+              <ul class="text-xs space-y-1.5 text-slate-300 font-mono pt-2">
+                <li>✓ 21 / 24 Books Completed</li>
+                <li>✓ Obsidian Zettelkasten Synced</li>
+                <li class="text-cyan-300">→ Current: "Designing Data Systems"</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      routine: {
+        code: 'FOLDER // 04 • ROUTINE TODAY',
+        title: 'DAILY PROTOCOL & HABIT MATRIX',
+        color: '#f59e0b',
+        badge: '14-DAY UNBROKEN STREAK',
+        icon: 'ph-sun-horizon',
+        footer: 'AMBER LED CHANNEL // CIRCADIAN RHYTHM OPTIMIZED',
+        render: () => `
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div class="p-4 rounded-xl bg-black/45 border border-amber-500/30 space-y-2.5">
+              <span class="text-xs font-mono uppercase text-amber-300">Morning & Afternoon Protocol</span>
+              <div class="p-3 rounded-lg bg-amber-500/15 border border-amber-500/40 flex items-center justify-between">
+                <span class="text-sm text-white">06:30 • Hydrate + Electrolytes + Sunlight</span>
+                <span class="text-xs font-mono text-amber-300">COMPLETED</span>
+              </div>
+              <div class="p-3 rounded-lg bg-amber-500/15 border border-amber-500/40 flex items-center justify-between">
+                <span class="text-sm text-white">07:00 • Cold Plunge (3 mins @ 4°C)</span>
+                <span class="text-xs font-mono text-amber-300">COMPLETED</span>
+              </div>
+              <div class="p-3 rounded-lg bg-purple-500/20 border border-purple-400 flex items-center justify-between">
+                <span class="text-sm text-white">09:00 • 90m Deep Work Block (Zero Phone)</span>
+                <span class="text-xs font-mono text-purple-300">IN PROGRESS</span>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-black/45 border border-amber-500/30 space-y-2.5">
+              <span class="text-xs font-mono uppercase text-purple-300">Evening Wind-Down Protocol</span>
+              <div class="p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
+                <span class="text-sm text-slate-200">20:30 • Magnesium Bisglycinate + Reading</span>
+                <span class="text-xs font-mono text-slate-400">UPCOMING</span>
+              </div>
+              <div class="p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
+                <span class="text-sm text-slate-200">21:30 • Red Light Mode / Zero Blue Light</span>
+                <span class="text-xs font-mono text-slate-400">UPCOMING</span>
+              </div>
+              <div class="p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
+                <span class="text-sm text-slate-200">22:30 • Sleep Chamber @ 18.5°C</span>
+                <span class="text-xs font-mono text-slate-400">UPCOMING</span>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      budget: {
+        code: 'FOLDER // 05 • BUDGET',
+        title: 'TREASURY, CASHFLOW & BUDGET',
+        color: '#10b981',
+        badge: 'NET WORTH +$142,800',
+        icon: 'ph-currency-circle-dollar',
+        footer: 'EMERALD LED CHANNEL // ZERO-KNOWLEDGE FINANCIAL TELEMETRY',
+        render: () => `
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 sensitive-data">
+            <div class="p-4 rounded-xl bg-black/45 border border-emerald-500/30 space-y-3">
+              <span class="text-xs font-mono text-emerald-300 uppercase">Monthly Breakdown</span>
+              <div class="p-3 rounded-lg bg-emerald-950/30 border border-emerald-500/30">
+                <p class="text-xs text-slate-400">Total Income</p>
+                <p class="text-2xl font-mono font-bold text-emerald-400">$8,420.00</p>
+              </div>
+              <div class="p-3 rounded-lg bg-purple-950/30 border border-purple-500/30">
+                <p class="text-xs text-slate-400">Total Expenses</p>
+                <p class="text-2xl font-mono font-bold text-purple-300">$3,150.00</p>
+              </div>
+              <div class="p-3 rounded-lg bg-cyan-950/30 border border-cyan-500/30">
+                <p class="text-xs text-slate-400">Automated Investments</p>
+                <p class="text-2xl font-mono font-bold text-cyan-300">$3,420.00</p>
+              </div>
+            </div>
+
+            <div class="lg:col-span-2 p-4 rounded-xl bg-black/45 border border-emerald-500/30 flex flex-col justify-between">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-mono text-emerald-300 uppercase">Category Allocation & Limits</span>
+                <span class="text-xs font-mono text-slate-400">$1,850 Remaining Buffer</span>
+              </div>
+
+              <div class="space-y-3 my-4">
+                <div>
+                  <div class="flex justify-between text-xs font-mono mb-1"><span>Housing & Studio Lab</span><span class="text-emerald-300">$1,400 / $1,400</span></div>
+                  <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden"><div class="w-full h-full bg-emerald-400"></div></div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs font-mono mb-1"><span>Organic Nutrition & Supplements</span><span class="text-purple-300">$680 / $800</span></div>
+                  <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden"><div class="w-[85%] h-full bg-purple-400"></div></div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs font-mono mb-1"><span>Cloud & AI API Compute</span><span class="text-cyan-300">$240 / $400</span></div>
+                  <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden"><div class="w-[60%] h-full bg-cyan-400"></div></div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs font-mono mb-1"><span>Leisure & Travel Fund</span><span class="text-pink-300">$830 / $1,200</span></div>
+                  <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden"><div class="w-[69%] h-full bg-pink-400"></div></div>
+                </div>
+              </div>
+
+              <div class="text-xs font-mono text-emerald-300 pt-2 border-t border-white/10">Savings Rate Target: 62.5% Achieved</div>
+            </div>
+          </div>
+        `
+      },
+
+      health: {
+        code: 'FOLDER // 06 • HEALTH & BIOMETRICS',
+        title: 'BIOMETRIC TELEMETRY (SLEEP • WORKOUT • STEPS • BPM)',
+        color: '#f43f5e',
+        badge: '94% RECOVERY READINESS',
+        icon: 'ph-heartbeat',
+        footer: 'CRIMSON LED CHANNEL // RING & WATCH SENSORS LIVE',
+        render: () => `
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Sleep Card -->
+            <div class="p-4 rounded-xl bg-black/45 border border-purple-500/40 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono text-purple-300">SLEEP ARCHITECTURE</span>
+                <i class="ph-fill ph-moon-stars text-purple-400 text-lg"></i>
+              </div>
+              <p class="text-2xl font-mono font-bold text-white">7h 48m</p>
+              <p class="text-xs font-mono text-emerald-400">92% Efficiency Score</p>
+              <div class="pt-2 space-y-1 text-[11px] font-mono text-slate-300">
+                <div class="flex justify-between"><span>Deep Sleep:</span><span class="text-purple-300">1h 54m</span></div>
+                <div class="flex justify-between"><span>REM Sleep:</span><span class="text-cyan-300">2h 12m</span></div>
+                <div class="flex justify-between"><span>Light Sleep:</span><span class="text-slate-400">3h 42m</span></div>
+              </div>
+            </div>
+
+            <!-- Workout / Entrenamiento -->
+            <div class="p-4 rounded-xl bg-black/45 border border-amber-500/40 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono text-amber-300">WORKOUT LOAD</span>
+                <i class="ph-fill ph-barbell text-amber-400 text-lg"></i>
+              </div>
+              <p class="text-2xl font-mono font-bold text-white">640 kcal</p>
+              <p class="text-xs font-mono text-amber-300">Upper Hypertrophy + Zone 2</p>
+              <div class="pt-2 space-y-1 text-[11px] font-mono text-slate-300">
+                <div class="flex justify-between"><span>Duration:</span><span>68 mins</span></div>
+                <div class="flex justify-between"><span>Total Volume:</span><span>11,450 kg</span></div>
+                <div class="flex justify-between"><span>Strain Score:</span><span class="text-amber-300">15.4 / 21</span></div>
+              </div>
+            </div>
+
+            <!-- Steps / Pasos -->
+            <div class="p-4 rounded-xl bg-black/45 border border-cyan-500/40 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono text-cyan-300">DAILY STEPS</span>
+                <i class="ph-fill ph-footprints text-cyan-400 text-lg"></i>
+              </div>
+              <p class="text-2xl font-mono font-bold text-white">11,420</p>
+              <p class="text-xs font-mono text-cyan-300">114% of 10k Goal</p>
+              <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden mt-2">
+                <div class="w-full h-full bg-cyan-400 shadow-[0_0_10px_#06b6d4]"></div>
+              </div>
+              <p class="text-[11px] font-mono text-slate-400 pt-1">Distance: 8.7 km • Floors: 16</p>
+            </div>
+
+            <!-- Heart Rate / Pulsaciones -->
+            <div class="p-4 rounded-xl bg-black/45 border border-rose-500/50 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono text-rose-300">HEART RATE & HRV</span>
+                <i class="ph-fill ph-heartbeat text-rose-400 text-lg animate-pulse"></i>
+              </div>
+              <p class="text-2xl font-mono font-bold text-rose-400">68 BPM</p>
+              <p class="text-xs font-mono text-slate-300">Resting: 49 bpm • HRV: 74 ms</p>
+              <div class="h-12 bg-black/50 rounded-lg border border-rose-500/30 p-1.5 flex items-center">
+                <svg class="w-full h-full overflow-visible" viewBox="0 0 200 36" preserveAspectRatio="none">
+                  <path d="M0,18 L30,18 L38,8 L45,28 L54,2 L62,34 L70,15 L80,18 L130,18 L138,8 L145,28 L154,2 L162,34 L170,15 L200,18" fill="none" stroke="#f43f5e" stroke-width="2" class="drop-shadow-[0_0_8px_#f43f5e]" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        `
+      }
+    };
+
+    function openFolder(moduleKey) {
+      const cfg = folderConfig[moduleKey];
+      if (!cfg) return;
+
+      const backdrop = document.getElementById('folderOverlayBackdrop');
+      const container = document.getElementById('folderModalContainer');
+
+      // Apply module specific neon LED color to the folder modal
+      container.style.setProperty('--module-color', cfg.color);
+      document.getElementById('folderModalCode').textContent = cfg.code;
+      document.getElementById('folderModalTitle').textContent = cfg.title;
+      document.getElementById('folderModalBadge').textContent = cfg.badge;
+      document.getElementById('folderModalBadge').style.borderColor = cfg.color;
+      document.getElementById('folderModalBadge').style.color = '#fff';
+      document.getElementById('folderModalIcon').className = `ph-bold ${cfg.icon} text-lg`;
+      document.getElementById('folderModalIcon').style.color = cfg.color;
+      document.getElementById('folderFooterStatus').textContent = cfg.footer;
+      document.getElementById('folderFooterStatus').style.color = cfg.color;
+
+      document.getElementById('folderModalBody').innerHTML = cfg.render();
+
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+
+      requestAnimationFrame(() => {
+        container.classList.remove('scale-95', 'opacity-0');
+        container.classList.add('scale-100', 'opacity-100');
+      });
+    }
+
+    function closeFolder() {
+      const backdrop = document.getElementById('folderOverlayBackdrop');
+      const container = document.getElementById('folderModalContainer');
+      container.classList.remove('scale-100', 'opacity-100');
+      container.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        backdrop.classList.add('hidden');
+        backdrop.classList.remove('flex');
+      }, 220);
+    }
+
+    function closeFolderOnBackdrop(e) {
+      if (e.target.id === 'folderOverlayBackdrop') {
+        closeFolder();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeFolder();
+    });
+  </script>
+</body>
+</html>
