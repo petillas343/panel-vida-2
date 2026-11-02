@@ -3,16 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#070710">
   <title>AETHER // Personal Life OS</title>
-
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-
   <style>
     * { box-sizing: border-box; }
     body {
@@ -20,493 +12,423 @@
       margin: 0;
       color: #f3f4f6;
       background-color: #05050a;
-      background-image:
-        radial-gradient(circle at 15% 10%, rgba(168,85,247,.13), transparent 35%),
-        radial-gradient(circle at 90% 85%, rgba(6,182,212,.08), transparent 35%),
-        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-      background-size: auto, auto, 36px 36px, 36px 36px;
-      font-family: Inter, system-ui, sans-serif;
+      background-image: radial-gradient(circle at 15% 10%, rgba(168,85,247,.15), transparent 40%);
+      font-family: system-ui, -apple-system, sans-serif;
     }
     .glass {
-      background: linear-gradient(155deg, rgba(20,20,35,.88), rgba(10,10,19,.94));
-      border: 1px solid rgba(168,85,247,.25);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 12px 35px rgba(0,0,0,.35);
+      background: rgba(16, 16, 28, 0.92);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
     }
-    .neon {
-      color: #e9d5ff;
-      text-shadow: 0 0 12px rgba(168,85,247,.75);
-    }
-    .neon-line {
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #a855f7, #06b6d4, transparent);
-      box-shadow: 0 0 14px rgba(168,85,247,.55);
-    }
+    .neon { color: #e9d5ff; text-shadow: 0 0 12px rgba(168,85,247,.75); }
+    .neon-line { height: 2px; background: linear-gradient(90deg, transparent, #a855f7, #06b6d4, transparent); }
     .field {
       width: 100%;
       color: #f3f4f6;
-      background: rgba(3,3,10,.75);
-      border: 1px solid rgba(168,85,247,.3);
+      background: #090914;
+      border: 1px solid rgba(168,85,247,.35);
       border-radius: 10px;
-      padding: 11px 12px;
+      padding: 12px;
       outline: none;
-    }
-    .field:focus {
-      border-color: #a855f7;
-      box-shadow: 0 0 0 2px rgba(168,85,247,.15);
     }
     .btn-primary {
       color: white;
       background: linear-gradient(100deg, #7e22ce, #9333ea);
-      border: 1px solid rgba(216,180,254,.35);
+      border: 1px solid rgba(216,180,254,.4);
       border-radius: 10px;
-      padding: 11px 14px;
+      padding: 12px 14px;
+      font-weight: 600;
       cursor: pointer;
+      touch-action: manipulation;
     }
+    .btn-primary:active { transform: scale(0.98); filter: brightness(1.2); }
     .btn-secondary {
       color: #d8b4fe;
-      background: rgba(168,85,247,.08);
-      border: 1px solid rgba(168,85,247,.25);
+      background: rgba(168,85,247,.12);
+      border: 1px solid rgba(168,85,247,.35);
       border-radius: 10px;
-      padding: 10px 12px;
+      padding: 12px 14px;
+      font-weight: 600;
       cursor: pointer;
+      touch-action: manipulation;
     }
-    .btn-secondary.active-filter {
-      background: rgba(168,85,247,.28);
-      border-color: #a855f7;
-      color: #ffffff;
-    }
-    .task-row {
-      border: 1px solid rgba(255,255,255,.07);
-      background: rgba(0,0,0,.25);
-      border-radius: 12px;
-    }
-    .task-row.completed .task-title {
-      color: #64748b;
-      text-decoration: line-through;
-    }
+    .btn-secondary:active { transform: scale(0.98); background: rgba(168,85,247,.25); }
+    .btn-secondary.active-filter { background: rgba(168,85,247,.35); border-color: #a855f7; color: #fff; }
+    .task-row { border: 1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.3); border-radius: 12px; }
+    .task-row.completed .task-title { color: #64748b; text-decoration: line-through; }
     .hidden { display: none !important; }
   </style>
 </head>
-
 <body>
   <div class="neon-line w-full"></div>
 
-  <header class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between gap-4">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center border border-purple-500/60 bg-purple-500/10">
-        <i class="ph-fill ph-planet text-2xl text-purple-300"></i>
-      </div>
-      <div>
-        <h1 class="font-bold tracking-[.2em] text-xl neon">AETHER</h1>
-        <p class="text-[10px] text-slate-500 font-mono tracking-widest">PERSONAL LIFE OS v1.2</p>
-      </div>
+  <header class="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
+    <div>
+      <h1 class="font-bold tracking-widest text-xl neon">AETHER</h1>
+      <p class="text-[10px] text-slate-400 font-mono tracking-widest">PERSONAL LIFE OS v1.3</p>
     </div>
-
     <div class="flex items-center gap-3">
-      <span id="connectionStatus" class="text-xs font-mono text-emerald-400">
-        ● CORE READY
-      </span>
-      <button id="logoutButton" onclick="handleLogout()" class="btn-secondary text-xs hidden" type="button">
-        Cerrar sesión
-      </button>
+      <span id="connectionStatus" class="text-xs font-mono text-amber-400">● LOADING JS...</span>
+      <button id="logoutButton" type="button" class="btn-secondary text-xs hidden">Salir</button>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
-    <!-- AUTH SECTION -->
-    <section id="authSection" class="max-w-md mx-auto mt-6 sm:mt-12">
-      <div class="glass rounded-2xl p-6 sm:p-8">
-        <div class="mb-6">
-          <div class="flex items-center justify-between">
-            <p class="text-xs font-mono text-purple-400 tracking-widest">IDENTITY // ACCESS</p>
-            <span id="modeBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
-              MODO: LOGIN
-            </span>
-          </div>
-          <h2 id="authHeading" class="text-2xl font-bold mt-2">Iniciar sesión en AETHER</h2>
-          <p class="text-sm text-slate-400 mt-1">
-            Conecta con tu base de datos privada de Supabase.
-          </p>
-        </div>
+  <main class="max-w-7xl mx-auto px-4 pb-12">
+    <!-- AUTH -->
+    <section id="authSection" class="max-w-md mx-auto mt-6">
+      <div class="glass rounded-2xl p-6">
+        <p class="text-xs font-mono text-purple-400 tracking-widest">IDENTITY // ACCESS</p>
+        <h2 class="text-2xl font-bold mt-1">Acceso a AETHER</h2>
+        <p class="text-xs text-slate-400 mt-1 mb-5">Escribe tu email y contraseña y toca una de las dos opciones:</p>
 
         <div class="space-y-4">
           <div>
-            <label for="authEmail" class="block text-xs text-slate-400 mb-2">Email</label>
-            <input id="authEmail" class="field" type="email" autocomplete="email" placeholder="tu@email.com">
+            <label class="block text-xs text-slate-300 mb-1">Email</label>
+            <input id="authEmail" class="field" type="email" placeholder="tu@email.com">
           </div>
-
           <div>
-            <label for="authPassword" class="block text-xs text-slate-400 mb-2">Contraseña (mín. 6 caracteres)</label>
-            <input id="authPassword" class="field" type="password" autocomplete="current-password" placeholder="••••••••">
+            <label class="block text-xs text-slate-300 mb-1">Contraseña (mín. 6 caracteres)</label>
+            <input id="authPassword" class="field" type="password" placeholder="••••••••">
           </div>
 
-          <button id="authSubmit" onclick="handleAuthSubmit()" class="btn-primary w-full font-semibold" type="button">
-            Iniciar sesión
-          </button>
-
-          <button id="toggleAuthMode" onclick="toggleMode()" class="btn-secondary w-full text-sm font-medium" type="button">
-            ¿No tienes cuenta? Cambiar a Crear cuenta
-          </button>
+          <div class="grid grid-cols-1 gap-3 pt-2">
+            <button id="btnLogin" type="button" class="btn-primary w-full">
+              1. Iniciar sesión (Ya tengo cuenta)
+            </button>
+            <button id="btnSignup" type="button" class="btn-secondary w-full">
+              2. Crear cuenta nueva (Registrarme)
+            </button>
+          </div>
         </div>
 
-        <div id="authMessageBox" class="hidden mt-4 p-3 rounded-xl border text-xs font-mono break-words"></div>
+        <div id="authMessageBox" class="mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-purple-500/10 border-purple-500/30 text-purple-200">
+          Sistema listo. Introduce tus datos arriba.
+        </div>
       </div>
     </section>
 
-    <!-- APP SECTION -->
+    <!-- APP -->
     <section id="appSection" class="hidden">
-      <div class="grid grid-cols-1 lg:grid-cols-[230px_minmax(0,1fr)] gap-5 mt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-5 mt-4">
         <aside class="glass rounded-2xl p-4 h-fit">
-          <div class="px-2 pt-2 pb-4 border-b border-white/5">
-            <p class="text-[10px] text-purple-400 font-mono tracking-widest">USER SESSION</p>
-            <p id="userEmail" class="text-sm text-slate-200 mt-2 break-all"></p>
+          <p class="text-[10px] text-purple-400 font-mono">SESIÓN ACTIVA</p>
+          <p id="userEmail" class="text-xs text-slate-200 mt-1 break-all"></p>
+          <div class="mt-4 px-3 py-2 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-200 text-sm flex justify-between">
+            <span>Tasks</span>
+            <span id="sidebarTaskCount" class="font-mono">0</span>
           </div>
-
-          <nav class="mt-4 space-y-2">
-            <button class="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-200 text-sm">
-              <span>Tasks</span>
-              <span id="sidebarTaskCount" class="ml-auto text-xs font-mono text-purple-300">0</span>
-            </button>
-          </nav>
         </aside>
 
-        <div class="space-y-5 min-w-0">
-          <section class="glass rounded-2xl p-5 sm:p-7">
-            <div class="flex flex-wrap justify-between items-start gap-4">
+        <div class="space-y-5">
+          <section class="glass rounded-2xl p-5">
+            <div class="flex justify-between items-center mb-4">
               <div>
-                <p class="text-xs font-mono text-purple-400 tracking-widest">CORE MODULE // 01</p>
-                <h2 class="text-2xl sm:text-3xl font-bold mt-2">Task Matrix</h2>
-                <p class="text-sm text-slate-400 mt-2">Sincronizado directamente con Supabase.</p>
+                <p class="text-xs font-mono text-purple-400">CORE MODULE // 01</p>
+                <h2 class="text-2xl font-bold">Task Matrix</h2>
               </div>
-
               <div class="text-right">
-                <p class="text-[10px] font-mono text-slate-500">PENDING TASKS</p>
-                <p id="pendingCount" class="text-3xl font-mono font-semibold text-purple-300">0</p>
+                <p class="text-[10px] font-mono text-slate-400">PENDIENTES</p>
+                <p id="pendingCount" class="text-2xl font-mono font-bold text-purple-300">0</p>
               </div>
             </div>
 
-            <div class="neon-line mt-5 mb-5 opacity-60"></div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div class="sm:col-span-2 lg:col-span-2">
-                <label class="block text-xs text-slate-400 mb-2">Nombre de la tarea *</label>
-                <input id="taskTitle" class="field" type="text" maxlength="180" placeholder="Ej. Estudiar cálculo">
-              </div>
-
-              <div>
-                <label class="block text-xs text-slate-400 mb-2">Prioridad</label>
-                <select id="taskPriority" class="field">
-                  <option value="low">Baja</option>
-                  <option value="medium" selected>Media</option>
-                  <option value="high">Alta</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-xs text-slate-400 mb-2">Fecha límite</label>
-                <input id="taskDueDate" class="field" type="date">
-              </div>
-
-              <div class="sm:col-span-2 lg:col-span-4">
-                <label class="block text-xs text-slate-400 mb-2">Descripción (opcional)</label>
-                <input id="taskDescription" class="field" type="text" maxlength="1000" placeholder="Detalles o contexto">
-              </div>
-
-              <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
-                <button id="addTaskButton" onclick="handleCreateTask()" class="btn-primary font-semibold" type="button">
-                  + Añadir tarea
-                </button>
-              </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input id="taskTitle" class="field sm:col-span-2" type="text" placeholder="Nombre de la tarea *">
+              <select id="taskPriority" class="field">
+                <option value="low">Prioridad: Baja</option>
+                <option value="medium" selected>Prioridad: Media</option>
+                <option value="high">Prioridad: Alta</option>
+              </select>
+              <input id="taskDueDate" class="field" type="date">
+              <input id="taskDescription" class="field sm:col-span-2" type="text" placeholder="Descripción (opcional)">
+              <button id="addTaskButton" type="button" class="btn-primary sm:col-span-3">+ Guardar tarea en Supabase</button>
             </div>
           </section>
 
-          <section class="glass rounded-2xl p-5 sm:p-7">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
-              <div>
-                <p class="text-xs font-mono text-cyan-400 tracking-widest">DATABASE // LIVE DATA</p>
-                <h3 class="text-xl font-bold mt-1">Tus tareas</h3>
-              </div>
-
+          <section class="glass rounded-2xl p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <h3 class="text-lg font-bold">Tus tareas</h3>
               <div class="flex gap-2">
-                <button id="filterAll" onclick="changeFilter('all')" class="btn-secondary active-filter text-xs" type="button">Todas</button>
-                <button id="filterPending" onclick="changeFilter('pending')" class="btn-secondary text-xs" type="button">Pendientes</button>
-                <button id="filterCompleted" onclick="changeFilter('completed')" class="btn-secondary text-xs" type="button">Hechas</button>
+                <button id="filterAll" type="button" class="btn-secondary active-filter text-xs">Todas</button>
+                <button id="filterPending" type="button" class="btn-secondary text-xs">Pendientes</button>
+                <button id="filterCompleted" type="button" class="btn-secondary text-xs">Hechas</button>
               </div>
             </div>
 
-            <div id="taskMessageBox" class="hidden mb-4 p-3 rounded-xl border text-xs font-mono break-words"></div>
+            <div id="taskMessageBox" class="hidden mb-3 p-3 rounded-xl border text-xs font-mono break-words"></div>
             <div id="taskList" class="space-y-3"></div>
-
-            <div id="emptyState" class="hidden text-center py-12">
-              <p class="text-slate-300 mt-3">No hay tareas en esta vista.</p>
-              <p class="text-xs text-slate-500 mt-1">Añade una tarea arriba para guardarla en Supabase.</p>
-            </div>
+            <p id="emptyState" class="hidden text-center text-slate-400 py-8 text-sm">No hay tareas en esta vista.</p>
           </section>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- BLOQUE 1: DETECTOR DE ERRORES GLOBAL INDEPENDIENTE -->
   <script>
-    const SUPABASE_URL = "https://dzyhecukaiujbuvsemtf.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_Iv1sS0zzisomBIRZwp_GwA_dPWksAwl";
-
-    let authMode = "login";
-    let sessionToken = localStorage.getItem("aether_token") || null;
-    let currentUser = JSON.parse(localStorage.getItem("aether_user") || "null");
-    let tasks = [];
-    let currentFilter = "all";
-
-    function $(id) { return document.getElementById(id); }
-
-    function showMsg(boxId, text, type) {
-      const box = $(boxId);
-      if (!box) return;
-      if (!text) {
-        box.classList.add("hidden");
-        return;
+    window.onerror = function(msg, url, line) {
+      var box = document.getElementById("authMessageBox");
+      if (box) {
+        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono bg-rose-500/20 border-rose-500 text-rose-200";
+        box.textContent = "FALLO JS (Línea " + line + "): " + msg;
       }
-      box.classList.remove("hidden");
-      box.textContent = text;
-      if (type === "error") {
-        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-rose-500/15 border-rose-500/40 text-rose-300";
-      } else if (type === "success") {
-        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-emerald-500/15 border-emerald-500/40 text-emerald-300";
-      } else {
-        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-purple-500/15 border-purple-500/40 text-purple-200";
-      }
-    }
-
-    window.onerror = function(msg, _url, line) {
-      showMsg("authMessageBox", "Error JS (Línea " + line + "): " + msg, "error");
     };
+  </script>
 
-    function toggleMode() {
-      authMode = (authMode === "login") ? "signup" : "login";
-      const isLogin = (authMode === "login");
-      $("modeBadge").textContent = isLogin ? "MODO: LOGIN" : "MODO: REGISTRO";
-      $("authHeading").textContent = isLogin ? "Iniciar sesión en AETHER" : "Crear cuenta nueva";
-      $("authSubmit").textContent = isLogin ? "Iniciar sesión" : "Registrar mi cuenta ahora";
-      $("toggleAuthMode").textContent = isLogin
-        ? "¿No tienes cuenta? Cambiar a Crear cuenta"
-        : "¿Ya tienes cuenta? Cambiar a Iniciar sesión";
-      showMsg("authMessageBox", isLogin ? "" : "Modo Registro activo: escribe tu correo y contraseña y pulsa 'Registrar mi cuenta ahora'.", "info");
-    }
+  <!-- BLOQUE 2: MOTOR PRINCIPAL -->
+  <script>
+    (function() {
+      var SUPABASE_URL = "https://dzyhecukaiujbuvsemtf.supabase.co";
+      var SUPABASE_KEY = "sb_publishable_Iv1sS0zzisomBIRZwp_GwA_dPWksAwl";
 
-    async function handleAuthSubmit() {
-      const email = $("authEmail").value.trim();
-      const password = $("authPassword").value;
+      var sessionToken = null;
+      var currentUser = null;
+      var tasks = [];
+      var currentFilter = "all";
 
-      if (!email || !password) {
-        showMsg("authMessageBox", "Escribe tu correo y contraseña primero.", "error");
-        return;
+      function el(id) { return document.getElementById(id); }
+
+      function setMsg(boxId, text, isErr) {
+        var box = el(boxId);
+        if (!box) return;
+        if (!text) { box.classList.add("hidden"); return; }
+        box.classList.remove("hidden");
+        box.textContent = text;
+        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words " +
+          (isErr ? "bg-rose-500/20 border-rose-500/50 text-rose-200" : "bg-emerald-500/20 border-emerald-500/50 text-emerald-200");
       }
-      if (password.length < 6) {
-        showMsg("authMessageBox", "La contraseña debe tener mínimo 6 caracteres.", "error");
-        return;
-      }
 
-      $("authSubmit").disabled = true;
-      showMsg("authMessageBox", "Conectando con Supabase...", "info");
+      // Confirmar que el JS ha arrancado
+      el("connectionStatus").textContent = "● JS ACTIVE v1.3";
+      el("connectionStatus").className = "text-xs font-mono text-emerald-400";
 
-      try {
-        const endpoint = (authMode === "login")
-          ? "/auth/v1/token?grant_type=password"
-          : "/auth/v1/signup";
+      async function runAuth(mode) {
+        var email = el("authEmail").value.trim();
+        var password = el("authPassword").value;
 
-        const res = await fetch(SUPABASE_URL + endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": SUPABASE_KEY
-          },
-          body: JSON.stringify({ email: email, password: password })
-        });
+        setMsg("authMessageBox", "Procesando clic (" + mode + ")...", false);
 
-        const data = await res.json();
-
-        if (!res.ok) {
-          const errDesc = data.msg || data.error_description || data.message || JSON.stringify(data);
-          throw new Error(errDesc);
+        if (!email || !password) {
+          setMsg("authMessageBox", "Escribe tu correo y contraseña primero.", true);
+          return;
         }
-
-        if (data.access_token && data.user) {
-          sessionToken = data.access_token;
-          currentUser = data.user;
-          localStorage.setItem("aether_token", sessionToken);
-          localStorage.setItem("aether_user", JSON.stringify(currentUser));
-          enterApp();
-        } else if (data.id || data.user) {
-          showMsg("authMessageBox", "¡Cuenta registrada! Pero en Supabase te faltó pulsar el botón verde 'Save changes' al desactivar Confirm Email. Ve a Supabase, pulsa Save changes, o confirma el correo que te ha llegado.", "success");
-          authMode = "login";
-        } else {
-          showMsg("authMessageBox", "Respuesta recibida. Cambia a Iniciar sesión y entra.", "success");
-        }
-      } catch (err) {
-        let msg = err.message;
-        if (msg.includes("Invalid login credentials")) {
-          msg = "Ese usuario no existe aún o la contraseña no coincide. Pulsa primero el botón de abajo ('Cambiar a Crear cuenta') para registrarte.";
-        }
-        showMsg("authMessageBox", "Error: " + msg, "error");
-      } finally {
-        $("authSubmit").disabled = false;
-      }
-    }
-
-    function enterApp() {
-      $("authSection").classList.add("hidden");
-      $("appSection").classList.remove("hidden");
-      $("logoutButton").classList.remove("hidden");
-      $("userEmail").textContent = currentUser.email || "Usuario activo";
-      $("connectionStatus").textContent = "● SUPABASE ONLINE";
-      loadTasks();
-    }
-
-    function handleLogout() {
-      localStorage.removeItem("aether_token");
-      localStorage.removeItem("aether_user");
-      sessionToken = null;
-      currentUser = null;
-      tasks = [];
-      $("appSection").classList.add("hidden");
-      $("logoutButton").classList.add("hidden");
-      $("authSection").classList.remove("hidden");
-      $("connectionStatus").textContent = "● SIGNED OUT";
-    }
-
-    async function loadTasks() {
-      if (!sessionToken || !currentUser) return;
-      showMsg("taskMessageBox", "Cargando tareas...", "info");
-
-      try {
-        const res = await fetch(SUPABASE_URL + "/rest/v1/tasks?select=*&order=created_at.desc", {
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": "Bearer " + sessionToken
-          }
-        });
-
-        if (res.status === 401) {
-          handleLogout();
-          showMsg("authMessageBox", "Tu sesión ha expirado. Inicia sesión de nuevo.", "error");
+        if (password.length < 6) {
+          setMsg("authMessageBox", "La contraseña debe tener al menos 6 caracteres.", true);
           return;
         }
 
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Error al leer tareas");
+        var path = (mode === "login") ? "/auth/v1/token?grant_type=password" : "/auth/v1/signup";
+        setMsg("authMessageBox", "Conectando con Supabase (" + mode + ")...", false);
 
-        tasks = Array.isArray(data) ? data : [];
-        showMsg("taskMessageBox", "");
-        renderTasks();
-      } catch (err) {
-        showMsg("taskMessageBox", "Error cargando: " + err.message, "error");
+        try {
+          var res = await fetch(SUPABASE_URL + path, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": SUPABASE_KEY
+            },
+            body: JSON.stringify({ email: email, password: password })
+          });
+
+          var data = await res.json();
+
+          if (!res.ok) {
+            var errText = data.msg || data.error_description || data.message || JSON.stringify(data);
+            setMsg("authMessageBox", "Supabase rechazó la petición: " + errText, true);
+            return;
+          }
+
+          if (data.access_token && data.user) {
+            sessionToken = data.access_token;
+            currentUser = data.user;
+            try {
+              localStorage.setItem("aether_token", sessionToken);
+              localStorage.setItem("aether_user", JSON.stringify(currentUser));
+            } catch (e) {}
+            openDashboard();
+          } else {
+            setMsg("authMessageBox", "Cuenta creada, pero Supabase exige confirmar email o iniciar sesión. Pulsa ahora el botón 1 (Iniciar sesión).", false);
+          }
+        } catch (err) {
+          setMsg("authMessageBox", "Error de red o clave: " + err.message, true);
+        }
       }
-    }
 
-    async function handleCreateTask() {
-      const title = $("taskTitle").value.trim();
-      const description = $("taskDescription").value.trim();
-      const priority = $("taskPriority").value;
-      const dueDate = $("taskDueDate").value || null;
-
-      if (!title) {
-        showMsg("taskMessageBox", "Escribe un nombre para la tarea.", "error");
-        return;
+      function openDashboard() {
+        el("authSection").classList.add("hidden");
+        el("appSection").classList.remove("hidden");
+        el("logoutButton").classList.remove("hidden");
+        el("userEmail").textContent = currentUser.email || "Activo";
+        el("connectionStatus").textContent = "● ONLINE";
+        fetchTasks();
       }
 
-      $("addTaskButton").disabled = true;
-      showMsg("taskMessageBox", "Guardando en Supabase...", "info");
-
-      try {
-        const res = await fetch(SUPABASE_URL + "/rest/v1/tasks", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": SUPABASE_KEY,
-            "Authorization": "Bearer " + sessionToken,
-            "Prefer": "return=representation"
-          },
-          body: JSON.stringify({
-            user_id: currentUser.id,
-            title: title,
-            description: description,
-            status: "pending",
-            priority: priority,
-            due_date: dueDate
-          })
-        });
-
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "No se pudo insertar");
-
-        $("taskTitle").value = "";
-        $("taskDescription").value = "";
-        $("taskDueDate").value = "";
-        $("taskPriority").value = "medium";
-        await loadTasks();
-      } catch (err) {
-        showMsg("taskMessageBox", "Error al guardar: " + err.message, "error");
-      } finally {
-        $("addTaskButton").disabled = false;
+      async function fetchTasks() {
+        if (!sessionToken) return;
+        try {
+          var res = await fetch(SUPABASE_URL + "/rest/v1/tasks?select=*&order=created_at.desc", {
+            headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + sessionToken }
+          });
+          var data = await res.json();
+          if (!res.ok) {
+            setMsg("taskMessageBox", "Error leyendo tareas: " + (data.message || res.status), true);
+            return;
+          }
+          tasks = Array.isArray(data) ? data : [];
+          setMsg("taskMessageBox", "", false);
+          drawTasks();
+        } catch (e) {
+          setMsg("taskMessageBox", "Error red: " + e.message, true);
+        }
       }
-    }
 
-    async function toggleTaskStatus(taskId, completed) {
-      try {
-        await fetch(SUPABASE_URL + "/rest/v1/tasks?id=eq." + taskId, {
+      async function createTask() {
+        var title = el("taskTitle").value.trim();
+        if (!title) { setMsg("taskMessageBox", "Ponle un nombre a la tarea.", true); return; }
+
+        setMsg("taskMessageBox", "Guardando tarea...", false);
+        try {
+          var res = await fetch(SUPABASE_URL + "/rest/v1/tasks", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": SUPABASE_KEY,
+              "Authorization": "Bearer " + sessionToken,
+              "Prefer": "return=representation"
+            },
+            body: JSON.stringify({
+              user_id: currentUser.id,
+              title: title,
+              description: el("taskDescription").value.trim(),
+              priority: el("taskPriority").value,
+              due_date: el("taskDueDate").value || null,
+              status: "pending"
+            })
+          });
+          var data = await res.json();
+          if (!res.ok) {
+            setMsg("taskMessageBox", "Error guardando: " + (data.message || JSON.stringify(data)), true);
+            return;
+          }
+          el("taskTitle").value = "";
+          el("taskDescription").value = "";
+          el("taskDueDate").value = "";
+          fetchTasks();
+        } catch (e) {
+          setMsg("taskMessageBox", "Fallo al crear: " + e.message, true);
+        }
+      }
+
+      async function setDone(id, done) {
+        await fetch(SUPABASE_URL + "/rest/v1/tasks?id=eq." + id, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             "apikey": SUPABASE_KEY,
             "Authorization": "Bearer " + sessionToken
           },
-          body: JSON.stringify({ status: completed ? "completed" : "pending" })
+          body: JSON.stringify({ status: done ? "completed" : "pending" })
         });
-        await loadTasks();
-      } catch (err) {
-        showMsg("taskMessageBox", "Error actualizando: " + err.message, "error");
+        fetchTasks();
       }
-    }
 
-    async function removeTask(taskId) {
-      try {
-        await fetch(SUPABASE_URL + "/rest/v1/tasks?id=eq." + taskId, {
+      async function delTask(id) {
+        await fetch(SUPABASE_URL + "/rest/v1/tasks?id=eq." + id, {
           method: "DELETE",
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": "Bearer " + sessionToken
-          }
+          headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + sessionToken }
         });
-        await loadTasks();
-      } catch (err) {
-        showMsg("taskMessageBox", "Error borrando: " + err.message, "error");
+        fetchTasks();
       }
-    }
 
-    function changeFilter(filter) {
-      currentFilter = filter;
-      $("filterAll").classList.toggle("active-filter", filter === "all");
-      $("filterPending").classList.toggle("active-filter", filter === "pending");
-      $("filterCompleted").classList.toggle("active-filter", filter === "completed");
-      renderTasks();
-    }
+      function drawTasks() {
+        var list = el("taskList");
+        list.innerHTML = "";
+        var shown = tasks.filter(function(t) {
+          if (currentFilter === "pending") return t.status !== "completed";
+          if (currentFilter === "completed") return t.status === "completed";
+          return true;
+        });
 
-    function renderTasks() {
-      const list = $("taskList");
-      list.innerHTML = "";
+        el("pendingCount").textContent = tasks.filter(function(t) { return t.status !== "completed"; }).length;
+        el("sidebarTaskCount").textContent = tasks.length;
+        el("emptyState").classList.toggle("hidden", shown.length > 0);
 
-      const filtered = tasks.filter(function(t) {
-        if (currentFilter === "pending") return t.status !== "completed";
-        if (currentFilter === "completed") return t.status === "completed";
-        return true;
-      });
+        shown.forEach(function(t) {
+          var isDone = (t.status === "completed");
+          var row = document.createElement("div");
+          row.className = "task-row p-4 flex items-center justify-between gap-3 " + (isDone ? "completed" : "");
 
-      $("pendingCount").textContent = tasks.filter(function(t) { return t.status !== "completed"; }).length;
-      $("sidebarTaskCount").textContent = tasks.length;
-      $("emptyState").classList.toggle("hidden", filtered.length > 0);
+          var left = document.createElement("div");
+          left.className = "flex items-start gap-3 flex-1 min-w-0";
 
-      filtered.forEach(function(task) {
-        const completed = (task.status === "completed");
-        const row = document.createElement("article
+          var cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.checked = isDone;
+          cb.className = "mt-1 w-4 h-4 accent-purple-500";
+          cb.onchange = function() { setDone(t.id, cb.checked); };
+
+          var txt = document.createElement("div");
+          var title = document.createElement("p");
+          title.className = "task-title text-sm font-semibold text-white break-words";
+          title.textContent = t.title;
+          txt.appendChild(title);
+
+          if (t.description) {
+            var d = document.createElement("p");
+            d.className = "text-xs text-slate-400 mt-1";
+            d.textContent = t.description;
+            txt.appendChild(d);
+          }
+
+          left.appendChild(cb);
+          left.appendChild(txt);
+
+          var del = document.createElement("button");
+          del.className = "btn-secondary text-xs";
+          del.textContent = "Borrar";
+          del.onclick = function() { delTask(t.id); };
+
+          row.appendChild(left);
+          row.appendChild(del);
+          list.appendChild(row);
+        });
+      }
+
+      function setFilter(f) {
+        currentFilter = f;
+        el("filterAll").classList.toggle("active-filter", f === "all");
+        el("filterPending").classList.toggle("active-filter", f === "pending");
+        el("filterCompleted").classList.toggle("active-filter", f === "completed");
+        drawTasks();
+      }
+
+      // Asignación directa de eventos
+      el("btnLogin").onclick = function() { runAuth("login"); };
+      el("btnSignup").onclick = function() { runAuth("signup"); };
+      el("addTaskButton").onclick = createTask;
+      el("filterAll").onclick = function() { setFilter("all"); };
+      el("filterPending").onclick = function() { setFilter("pending"); };
+      el("filterCompleted").onclick = function() { setFilter("completed"); };
+      el("logoutButton").onclick = function() {
+        try { localStorage.clear(); } catch (e) {}
+        sessionToken = null;
+        currentUser = null;
+        el("appSection").classList.add("hidden");
+        el("logoutButton").classList.add("hidden");
+        el("authSection").classList.remove("hidden");
+      };
+
+      // Recuperar sesión previa si existe
+      try {
+        var savedTok = localStorage.getItem("aether_token");
+        var savedUsr = JSON.parse(localStorage.getItem("aether_user") || "null");
+        if (savedTok && savedUsr) {
+          sessionToken = savedTok;
+          currentUser = savedUsr;
+          openDashboard();
+        }
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>
