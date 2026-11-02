@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AETHER // Personal Life OS v2.1</title>
+  <title>AETHER // Personal Life OS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { box-sizing: border-box; }
@@ -12,14 +12,12 @@
       margin: 0;
       color: #f3f4f6;
       background-color: #05050a;
-      background-image:
-        radial-gradient(circle at 15% 10%, rgba(168,85,247,.15), transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(6,182,212,.1), transparent 40%);
+      background-image: radial-gradient(circle at 15% 10%, rgba(168,85,247,.15), transparent 40%);
       font-family: system-ui, -apple-system, sans-serif;
     }
     .glass {
-      background: rgba(14, 14, 26, 0.92);
-      border: 1px solid rgba(168, 85, 247, 0.28);
+      background: rgba(16, 16, 28, 0.92);
+      border: 1px solid rgba(168, 85, 247, 0.3);
       box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
     }
     .neon { color: #e9d5ff; text-shadow: 0 0 12px rgba(168,85,247,.75); }
@@ -27,65 +25,36 @@
     .field {
       width: 100%;
       color: #f3f4f6;
-      background: #080812;
-      border: 1px solid rgba(168,85,247,.32);
+      background: #090914;
+      border: 1px solid rgba(168,85,247,.35);
       border-radius: 10px;
-      padding: 11px 12px;
-      font-size: 0.875rem;
+      padding: 12px;
       outline: none;
     }
-    .field:focus { border-color: #a855f7; box-shadow: 0 0 0 2px rgba(168,85,247,.2); }
     .btn-primary {
       color: white;
       background: linear-gradient(100deg, #7e22ce, #9333ea);
       border: 1px solid rgba(216,180,254,.4);
       border-radius: 10px;
-      padding: 11px 14px;
+      padding: 12px 14px;
       font-weight: 600;
-      font-size: 0.875rem;
       cursor: pointer;
       touch-action: manipulation;
     }
-    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:active { transform: scale(0.98); filter: brightness(1.2); }
     .btn-secondary {
       color: #d8b4fe;
       background: rgba(168,85,247,.12);
       border: 1px solid rgba(168,85,247,.35);
       border-radius: 10px;
-      padding: 11px 14px;
+      padding: 12px 14px;
       font-weight: 600;
-      font-size: 0.875rem;
       cursor: pointer;
       touch-action: manipulation;
     }
-    .btn-secondary:active { transform: scale(0.98); }
-    .btn-secondary.active-filter {
-      background: rgba(168,85,247,.35);
-      border-color: #a855f7;
-      color: #fff;
-      padding: 8px 12px;
-      font-size: 0.75rem;
-    }
-    .btn-filter {
-      color: #d8b4fe;
-      background: rgba(168,85,247,.1);
-      border: 1px solid rgba(168,85,247,.3);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-weight: 500;
-      font-size: 0.75rem;
-      cursor: pointer;
-    }
-    .task-row {
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(8,8,16,.65);
-      border-radius: 14px;
-    }
-    .task-row.overdue {
-      border-color: rgba(244, 63, 94, 0.45);
-      background: rgba(244, 63, 94, 0.04);
-    }
-    .task-row.completed { opacity: 0.65; }
+    .btn-secondary:active { transform: scale(0.98); background: rgba(168,85,247,.25); }
+    .btn-secondary.active-filter { background: rgba(168,85,247,.35); border-color: #a855f7; color: #fff; }
+    .task-row { border: 1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.3); border-radius: 12px; }
     .task-row.completed .task-title { color: #64748b; text-decoration: line-through; }
     .hidden { display: none !important; }
   </style>
@@ -93,24 +62,24 @@
 <body>
   <div class="neon-line w-full"></div>
 
-  <header class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+  <header class="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
     <div>
       <h1 class="font-bold tracking-widest text-xl neon">AETHER</h1>
-      <p class="text-[10px] text-slate-400 font-mono tracking-widest">PERSONAL LIFE OS // v2.1</p>
+      <p class="text-[10px] text-slate-400 font-mono tracking-widest">PERSONAL LIFE OS v1.3</p>
     </div>
     <div class="flex items-center gap-3">
-      <span id="connectionStatus" class="text-xs font-mono text-emerald-400">● ONLINE v2.1</span>
-      <button id="logoutButton" type="button" class="btn-filter hidden">Cerrar sesión</button>
+      <span id="connectionStatus" class="text-xs font-mono text-amber-400">● LOADING JS...</span>
+      <button id="logoutButton" type="button" class="btn-secondary text-xs hidden">Salir</button>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 pb-16">
-    <!-- AUTH SECTION -->
+  <main class="max-w-7xl mx-auto px-4 pb-12">
+    <!-- AUTH -->
     <section id="authSection" class="max-w-md mx-auto mt-6">
       <div class="glass rounded-2xl p-6">
         <p class="text-xs font-mono text-purple-400 tracking-widest">IDENTITY // ACCESS</p>
         <h2 class="text-2xl font-bold mt-1">Acceso a AETHER</h2>
-        <p class="text-xs text-slate-400 mt-1 mb-5">Introduce tu email y contraseña:</p>
+        <p class="text-xs text-slate-400 mt-1 mb-5">Escribe tu email y contraseña y toca una de las dos opciones:</p>
 
         <div class="space-y-4">
           <div>
@@ -121,180 +90,92 @@
             <label class="block text-xs text-slate-300 mb-1">Contraseña (mín. 6 caracteres)</label>
             <input id="authPassword" class="field" type="password" placeholder="••••••••">
           </div>
+
           <div class="grid grid-cols-1 gap-3 pt-2">
-            <button id="btnLogin" type="button" class="btn-primary w-full">1. Iniciar sesión</button>
-            <button id="btnSignup" type="button" class="btn-secondary w-full text-center">2. Crear cuenta nueva</button>
+            <button id="btnLogin" type="button" class="btn-primary w-full">
+              1. Iniciar sesión (Ya tengo cuenta)
+            </button>
+            <button id="btnSignup" type="button" class="btn-secondary w-full">
+              2. Crear cuenta nueva (Registrarme)
+            </button>
           </div>
         </div>
-        <div id="authMessageBox" class="hidden mt-4 p-3 rounded-xl border text-xs font-mono break-words"></div>
+
+        <div id="authMessageBox" class="mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-purple-500/10 border-purple-500/30 text-purple-200">
+          Sistema listo. Introduce tus datos arriba.
+        </div>
       </div>
     </section>
 
-    <!-- APP SECTION -->
+    <!-- APP -->
     <section id="appSection" class="hidden">
-      <div class="grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-5 mt-2">
+      <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-5 mt-4">
         <aside class="glass rounded-2xl p-4 h-fit">
-          <div class="pb-3 border-b border-white/10">
-            <p class="text-[10px] text-purple-400 font-mono">OPERADOR ACTIVO</p>
-            <p id="userEmail" class="text-xs text-slate-200 mt-1 break-all font-mono"></p>
+          <p class="text-[10px] text-purple-400 font-mono">SESIÓN ACTIVA</p>
+          <p id="userEmail" class="text-xs text-slate-200 mt-1 break-all"></p>
+          <div class="mt-4 px-3 py-2 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-200 text-sm flex justify-between">
+            <span>Tasks</span>
+            <span id="sidebarTaskCount" class="font-mono">0</span>
           </div>
-
-          <nav class="mt-4 space-y-2 text-xs">
-            <div class="px-3 py-2.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-200 font-semibold flex justify-between items-center">
-              <span>01 // Tasks</span>
-              <span id="sidebarTaskCount" class="font-mono bg-purple-500/30 px-2 py-0.5 rounded">0</span>
-            </div>
-            <div class="px-3 py-2 text-slate-500 flex justify-between"><span>02 // Goals</span><span class="font-mono text-[10px]">FASE 3</span></div>
-            <div class="px-3 py-2 text-slate-500 flex justify-between"><span>03 // Habits</span><span class="font-mono text-[10px]">FASE 4</span></div>
-            <div class="px-3 py-2 text-slate-500 flex justify-between"><span>04 // Calendar</span><span class="font-mono text-[10px]">FASE 5</span></div>
-          </nav>
         </aside>
 
-        <div class="space-y-5 min-w-0">
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="glass rounded-xl p-3.5">
-              <p class="text-[10px] font-mono text-slate-400">PENDIENTES</p>
-              <p id="kpiPending" class="text-2xl font-mono font-bold text-purple-300 mt-1">0</p>
-            </div>
-            <div class="glass rounded-xl p-3.5">
-              <p class="text-[10px] font-mono text-cyan-400">EN CURSO</p>
-              <p id="kpiInProgress" class="text-2xl font-mono font-bold text-cyan-300 mt-1">0</p>
-            </div>
-            <div class="glass rounded-xl p-3.5">
-              <p class="text-[10px] font-mono text-emerald-400">COMPLETADAS</p>
-              <p id="kpiCompleted" class="text-2xl font-mono font-bold text-emerald-300 mt-1">0</p>
-            </div>
-            <div class="glass rounded-xl p-3.5">
-              <p class="text-[10px] font-mono text-rose-400">VENCIDAS</p>
-              <p id="kpiOverdue" class="text-2xl font-mono font-bold text-rose-400 mt-1">0</p>
-            </div>
-          </div>
-
+        <div class="space-y-5">
           <section class="glass rounded-2xl p-5">
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex justify-between items-center mb-4">
               <div>
-                <p class="text-[10px] font-mono text-purple-400 tracking-widest">CORE MODULE // 01</p>
-                <h2 id="formHeading" class="text-xl font-bold">Nueva Tarea</h2>
+                <p class="text-xs font-mono text-purple-400">CORE MODULE // 01</p>
+                <h2 class="text-2xl font-bold">Task Matrix</h2>
               </div>
-              <button id="cancelEditBtn" type="button" class="btn-filter hidden">Cancelar edición</button>
+              <div class="text-right">
+                <p class="text-[10px] font-mono text-slate-400">PENDIENTES</p>
+                <p id="pendingCount" class="text-2xl font-mono font-bold text-purple-300">0</p>
+              </div>
             </div>
 
-            <input id="editTaskId" type="hidden" value="">
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div class="sm:col-span-2">
-                <label class="block text-[11px] text-slate-400 mb-1">Título de la tarea *</label>
-                <input id="taskTitle" class="field" type="text" maxlength="180" placeholder="Ej. Entregar informe de física">
-              </div>
-
-              <div>
-                <label class="block text-[11px] text-slate-400 mb-1">Categoría</label>
-                <select id="taskCategory" class="field">
-                  <option value="universidad">🎓 Universidad</option>
-                  <option value="entrenamiento">💪 Entrenamiento</option>
-                  <option value="proyectos">⚡ Proyectos</option>
-                  <option value="personal">🏠 Personal</option>
-                  <option value="general" selected>📌 General</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-[11px] text-slate-400 mb-1">Prioridad</label>
-                <select id="taskPriority" class="field">
-                  <option value="low">🟢 Baja</option>
-                  <option value="medium" selected>🟡 Media</option>
-                  <option value="high">🔴 Alta</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-[11px] text-slate-400 mb-1">Estado</label>
-                <select id="taskStatus" class="field">
-                  <option value="pending" selected>⏳ Pendiente</option>
-                  <option value="in_progress">⚡ En curso</option>
-                  <option value="completed">✅ Completada</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-[11px] text-slate-400 mb-1">Fecha límite</label>
-                <input id="taskDueDate" class="field" type="date">
-              </div>
-
-              <div class="sm:col-span-2">
-                <label class="block text-[11px] text-slate-400 mb-1">Descripción / Notas</label>
-                <input id="taskDescription" class="field" type="text" maxlength="1000" placeholder="Detalles, enlaces o pasos...">
-              </div>
-
-              <div class="sm:col-span-2 lg:col-span-4 flex justify-end pt-1">
-                <button id="saveTaskButton" type="button" class="btn-primary w-full sm:w-auto">
-                  + Guardar tarea
-                </button>
-              </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input id="taskTitle" class="field sm:col-span-2" type="text" placeholder="Nombre de la tarea *">
+              <select id="taskPriority" class="field">
+                <option value="low">Prioridad: Baja</option>
+                <option value="medium" selected>Prioridad: Media</option>
+                <option value="high">Prioridad: Alta</option>
+              </select>
+              <input id="taskDueDate" class="field" type="date">
+              <input id="taskDescription" class="field sm:col-span-2" type="text" placeholder="Descripción (opcional)">
+              <button id="addTaskButton" type="button" class="btn-primary sm:col-span-3">+ Guardar tarea en Supabase</button>
             </div>
           </section>
 
           <section class="glass rounded-2xl p-5">
-            <div class="flex flex-col gap-3 mb-4 pb-4 border-b border-white/10">
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <h3 class="text-lg font-bold">Matriz de Tareas</h3>
-                <div class="flex flex-wrap gap-1.5">
-                  <button id="stAll" type="button" class="btn-filter active-filter">Todas</button>
-                  <button id="stPending" type="button" class="btn-filter">Pendientes</button>
-                  <button id="stProgress" type="button" class="btn-filter">En curso</button>
-                  <button id="stCompleted" type="button" class="btn-filter">Hechas</button>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1">
-                <input id="searchInput" class="field" type="text" placeholder="🔍 Buscar por título o nota...">
-
-                <select id="filterCategory" class="field">
-                  <option value="all">Categoría: Todas</option>
-                  <option value="universidad">🎓 Universidad</option>
-                  <option value="entrenamiento">💪 Entrenamiento</option>
-                  <option value="proyectos">⚡ Proyectos</option>
-                  <option value="personal">🏠 Personal</option>
-                  <option value="general">📌 General</option>
-                </select>
-
-                <select id="filterPriority" class="field">
-                  <option value="all">Prioridad: Todas</option>
-                  <option value="high">🔴 Solo Alta</option>
-                  <option value="medium">🟡 Solo Media</option>
-                  <option value="low">🟢 Solo Baja</option>
-                </select>
-
-                <select id="sortBy" class="field">
-                  <option value="created_desc">Orden: Más recientes</option>
-                  <option value="due_asc">Orden: Fecha límite cercana</option>
-                  <option value="priority_desc">Orden: Mayor prioridad</option>
-                </select>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <h3 class="text-lg font-bold">Tus tareas</h3>
+              <div class="flex gap-2">
+                <button id="filterAll" type="button" class="btn-secondary active-filter text-xs">Todas</button>
+                <button id="filterPending" type="button" class="btn-secondary text-xs">Pendientes</button>
+                <button id="filterCompleted" type="button" class="btn-secondary text-xs">Hechas</button>
               </div>
             </div>
 
-            <div id="taskMessageBox" class="hidden mb-4 p-3 rounded-xl border text-xs font-mono break-words"></div>
+            <div id="taskMessageBox" class="hidden mb-3 p-3 rounded-xl border text-xs font-mono break-words"></div>
             <div id="taskList" class="space-y-3"></div>
-            <p id="emptyState" class="hidden text-center text-slate-400 py-10 text-sm">
-              No hay tareas que coincidan con estos filtros.
-            </p>
+            <p id="emptyState" class="hidden text-center text-slate-400 py-8 text-sm">No hay tareas en esta vista.</p>
           </section>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- BLOQUE 1: DETECTOR DE ERRORES GLOBAL INDEPENDIENTE -->
   <script>
-    window.onerror = function(msg, _url, line) {
-      var box = document.getElementById("taskMessageBox") || document.getElementById("authMessageBox");
+    window.onerror = function(msg, url, line) {
+      var box = document.getElementById("authMessageBox");
       if (box) {
-        box.classList.remove("hidden");
-        box.className = "mt-3 mb-3 p-3 rounded-xl border text-xs font-mono bg-rose-500/20 border-rose-500 text-rose-200";
-        box.textContent = "Error JS (Línea " + line + "): " + msg;
+        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono bg-rose-500/20 border-rose-500 text-rose-200";
+        box.textContent = "FALLO JS (Línea " + line + "): " + msg;
       }
     };
   </script>
 
+  <!-- BLOQUE 2: MOTOR PRINCIPAL -->
   <script>
     (function() {
       var SUPABASE_URL = "https://dzyhecukaiujbuvsemtf.supabase.co";
@@ -303,7 +184,7 @@
       var sessionToken = null;
       var currentUser = null;
       var tasks = [];
-      var statusFilter = "all";
+      var currentFilter = "all";
 
       function el(id) { return document.getElementById(id); }
 
@@ -313,31 +194,50 @@
         if (!text) { box.classList.add("hidden"); return; }
         box.classList.remove("hidden");
         box.textContent = text;
-        box.className = "mt-3 mb-3 p-3 rounded-xl border text-xs font-mono break-words " +
-          (isErr ? "bg-rose-500/20 border-rose-500/50 text-rose-200" : "bg-emerald-500/15 border-emerald-500/40 text-emerald-200");
+        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words " +
+          (isErr ? "bg-rose-500/20 border-rose-500/50 text-rose-200" : "bg-emerald-500/20 border-emerald-500/50 text-emerald-200");
       }
+
+      // Confirmar que el JS ha arrancado
+      el("connectionStatus").textContent = "● JS ACTIVE v1.3";
+      el("connectionStatus").className = "text-xs font-mono text-emerald-400";
 
       async function runAuth(mode) {
         var email = el("authEmail").value.trim();
         var password = el("authPassword").value;
-        if (!email || password.length < 6) {
-          setMsg("authMessageBox", "Introduce un email válido y contraseña de al menos 6 caracteres.", true);
+
+        setMsg("authMessageBox", "Procesando clic (" + mode + ")...", false);
+
+        if (!email || !password) {
+          setMsg("authMessageBox", "Escribe tu correo y contraseña primero.", true);
           return;
         }
+        if (password.length < 6) {
+          setMsg("authMessageBox", "La contraseña debe tener al menos 6 caracteres.", true);
+          return;
+        }
+
         var path = (mode === "login") ? "/auth/v1/token?grant_type=password" : "/auth/v1/signup";
-        setMsg("authMessageBox", "Conectando con Supabase...", false);
+        setMsg("authMessageBox", "Conectando con Supabase (" + mode + ")...", false);
 
         try {
           var res = await fetch(SUPABASE_URL + path, {
             method: "POST",
-            headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY },
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": SUPABASE_KEY
+            },
             body: JSON.stringify({ email: email, password: password })
           });
+
           var data = await res.json();
+
           if (!res.ok) {
-            setMsg("authMessageBox", data.msg || data.error_description || data.message || "Error al autenticar", true);
+            var errText = data.msg || data.error_description || data.message || JSON.stringify(data);
+            setMsg("authMessageBox", "Supabase rechazó la petición: " + errText, true);
             return;
           }
+
           if (data.access_token && data.user) {
             sessionToken = data.access_token;
             currentUser = data.user;
@@ -347,10 +247,10 @@
             } catch (e) {}
             openDashboard();
           } else {
-            setMsg("authMessageBox", "Cuenta creada correctamente. Pulsa ahora en '1. Iniciar sesión'.", false);
+            setMsg("authMessageBox", "Cuenta creada, pero Supabase exige confirmar email o iniciar sesión. Pulsa ahora el botón 1 (Iniciar sesión).", false);
           }
         } catch (err) {
-          setMsg("authMessageBox", "Error de red: " + err.message, true);
+          setMsg("authMessageBox", "Error de red o clave: " + err.message, true);
         }
       }
 
@@ -359,6 +259,7 @@
         el("appSection").classList.remove("hidden");
         el("logoutButton").classList.remove("hidden");
         el("userEmail").textContent = currentUser.email || "Activo";
+        el("connectionStatus").textContent = "● ONLINE";
         fetchTasks();
       }
 
@@ -368,111 +269,166 @@
           var res = await fetch(SUPABASE_URL + "/rest/v1/tasks?select=*&order=created_at.desc", {
             headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + sessionToken }
           });
-          if (res.status === 401) {
-            el("logoutButton").click();
-            return;
-          }
           var data = await res.json();
           if (!res.ok) {
-            setMsg("taskMessageBox", "Error al cargar: " + (data.message || res.status), true);
+            setMsg("taskMessageBox", "Error leyendo tareas: " + (data.message || res.status), true);
             return;
           }
           tasks = Array.isArray(data) ? data : [];
-          renderTasks();
+          setMsg("taskMessageBox", "", false);
+          drawTasks();
         } catch (e) {
-          setMsg("taskMessageBox", "Error de red: " + e.message, true);
+          setMsg("taskMessageBox", "Error red: " + e.message, true);
         }
       }
 
-      async function saveTask() {
+      async function createTask() {
         var title = el("taskTitle").value.trim();
-        if (!title) {
-          setMsg("taskMessageBox", "El título de la tarea es obligatorio.", true);
-          return;
-        }
+        if (!title) { setMsg("taskMessageBox", "Ponle un nombre a la tarea.", true); return; }
 
-        var editId = el("editTaskId").value;
-        var payload = {
-          title: title,
-          description: el("taskDescription").value.trim(),
-          category: el("taskCategory").value,
-          priority: el("taskPriority").value,
-          status: el("taskStatus").value,
-          due_date: el("taskDueDate").value || null
-        };
-
-        el("saveTaskButton").disabled = true;
+        setMsg("taskMessageBox", "Guardando tarea...", false);
         try {
-          var url = SUPABASE_URL + "/rest/v1/tasks";
-          var method = "POST";
-
-          if (editId) {
-            url += "?id=eq." + editId;
-            method = "PATCH";
-          } else {
-            payload.user_id = currentUser.id;
-          }
-
-          var res = await fetch(url, {
-            method: method,
+          var res = await fetch(SUPABASE_URL + "/rest/v1/tasks", {
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
               "apikey": SUPABASE_KEY,
               "Authorization": "Bearer " + sessionToken,
               "Prefer": "return=representation"
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+              user_id: currentUser.id,
+              title: title,
+              description: el("taskDescription").value.trim(),
+              priority: el("taskPriority").value,
+              due_date: el("taskDueDate").value || null,
+              status: "pending"
+            })
           });
-
           var data = await res.json();
           if (!res.ok) {
             setMsg("taskMessageBox", "Error guardando: " + (data.message || JSON.stringify(data)), true);
             return;
           }
-
-          resetForm();
-          setMsg("taskMessageBox", editId ? "Tarea actualizada." : "Tarea creada.", false);
-          setTimeout(function() { setMsg("taskMessageBox", "", false); }, 2200);
-          await fetchTasks();
+          el("taskTitle").value = "";
+          el("taskDescription").value = "";
+          el("taskDueDate").value = "";
+          fetchTasks();
         } catch (e) {
-          setMsg("taskMessageBox", "Error de conexión: " + e.message, true);
-        } finally {
-          el("saveTaskButton").disabled = false;
+          setMsg("taskMessageBox", "Fallo al crear: " + e.message, true);
         }
       }
 
-      function startEditTask(task) {
-        el("editTaskId").value = task.id;
-        el("taskTitle").value = task.title || "";
-        el("taskDescription").value = task.description || "";
-        el("taskCategory").value = task.category || "general";
-        el("taskPriority").value = task.priority || "medium";
-        el("taskStatus").value = task.status || "pending";
-        el("taskDueDate").value = task.due_date || "";
-
-        el("formHeading").textContent = "Editando Tarea";
-        el("saveTaskButton").textContent = "Guardar cambios";
-        el("cancelEditBtn").classList.remove("hidden");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      function resetForm() {
-        el("editTaskId").value = "";
-        el("taskTitle").value = "";
-        el("taskDescription").value = "";
-        el("taskCategory").value = "general";
-        el("taskPriority").value = "medium";
-        el("taskStatus").value = "pending";
-        el("taskDueDate").value = "";
-        el("formHeading").textContent = "Nueva Tarea";
-        el("saveTaskButton").textContent = "+ Guardar tarea";
-        el("cancelEditBtn").classList.add("hidden");
-      }
-
-      async function quickStatusChange(id, newStatus) {
+      async function setDone(id, done) {
         await fetch(SUPABASE_URL + "/rest/v1/tasks?id=eq." + id, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             "apikey": SUPABASE_KEY,
-            "Authorization": "B
+            "Authorization": "Bearer " + sessionToken
+          },
+          body: JSON.stringify({ status: done ? "completed" : "pending" })
+        });
+        fetchTasks();
+      }
+
+      async function delTask(id) {
+        await fetch(SUPABASE_URL + "/rest/v1/tasks?id=eq." + id, {
+          method: "DELETE",
+          headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + sessionToken }
+        });
+        fetchTasks();
+      }
+
+      function drawTasks() {
+        var list = el("taskList");
+        list.innerHTML = "";
+        var shown = tasks.filter(function(t) {
+          if (currentFilter === "pending") return t.status !== "completed";
+          if (currentFilter === "completed") return t.status === "completed";
+          return true;
+        });
+
+        el("pendingCount").textContent = tasks.filter(function(t) { return t.status !== "completed"; }).length;
+        el("sidebarTaskCount").textContent = tasks.length;
+        el("emptyState").classList.toggle("hidden", shown.length > 0);
+
+        shown.forEach(function(t) {
+          var isDone = (t.status === "completed");
+          var row = document.createElement("div");
+          row.className = "task-row p-4 flex items-center justify-between gap-3 " + (isDone ? "completed" : "");
+
+          var left = document.createElement("div");
+          left.className = "flex items-start gap-3 flex-1 min-w-0";
+
+          var cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.checked = isDone;
+          cb.className = "mt-1 w-4 h-4 accent-purple-500";
+          cb.onchange = function() { setDone(t.id, cb.checked); };
+
+          var txt = document.createElement("div");
+          var title = document.createElement("p");
+          title.className = "task-title text-sm font-semibold text-white break-words";
+          title.textContent = t.title;
+          txt.appendChild(title);
+
+          if (t.description) {
+            var d = document.createElement("p");
+            d.className = "text-xs text-slate-400 mt-1";
+            d.textContent = t.description;
+            txt.appendChild(d);
+          }
+
+          left.appendChild(cb);
+          left.appendChild(txt);
+
+          var del = document.createElement("button");
+          del.className = "btn-secondary text-xs";
+          del.textContent = "Borrar";
+          del.onclick = function() { delTask(t.id); };
+
+          row.appendChild(left);
+          row.appendChild(del);
+          list.appendChild(row);
+        });
+      }
+
+      function setFilter(f) {
+        currentFilter = f;
+        el("filterAll").classList.toggle("active-filter", f === "all");
+        el("filterPending").classList.toggle("active-filter", f === "pending");
+        el("filterCompleted").classList.toggle("active-filter", f === "completed");
+        drawTasks();
+      }
+
+      // Asignación directa de eventos
+      el("btnLogin").onclick = function() { runAuth("login"); };
+      el("btnSignup").onclick = function() { runAuth("signup"); };
+      el("addTaskButton").onclick = createTask;
+      el("filterAll").onclick = function() { setFilter("all"); };
+      el("filterPending").onclick = function() { setFilter("pending"); };
+      el("filterCompleted").onclick = function() { setFilter("completed"); };
+      el("logoutButton").onclick = function() {
+        try { localStorage.clear(); } catch (e) {}
+        sessionToken = null;
+        currentUser = null;
+        el("appSection").classList.add("hidden");
+        el("logoutButton").classList.add("hidden");
+        el("authSection").classList.remove("hidden");
+      };
+
+      // Recuperar sesión previa si existe
+      try {
+        var savedTok = localStorage.getItem("aether_token");
+        var savedUsr = JSON.parse(localStorage.getItem("aether_user") || "null");
+        if (savedTok && savedUsr) {
+          sessionToken = savedTok;
+          currentUser = savedUsr;
+          openDashboard();
+        }
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>
