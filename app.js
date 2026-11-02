@@ -1,3 +1,5 @@
+javascript 
+
 (function() {
   var SUPABASE_URL = "https://dzyhecukaiujbuvsemtf.supabase.co";
   var SUPABASE_KEY = "sb_publishable_Iv1sS0zzisomBIRZwp_GwA_dPWksAwl";
