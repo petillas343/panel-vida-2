@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AETHER // Personal Life OS v2.0</title>
+  <title>AETHER // Personal Life OS v2.1</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { box-sizing: border-box; }
@@ -30,7 +30,7 @@
       background: #080812;
       border: 1px solid rgba(168,85,247,.32);
       border-radius: 10px;
-      padding: 10px 12px;
+      padding: 11px 12px;
       font-size: 0.875rem;
       outline: none;
     }
@@ -40,7 +40,7 @@
       background: linear-gradient(100deg, #7e22ce, #9333ea);
       border: 1px solid rgba(216,180,254,.4);
       border-radius: 10px;
-      padding: 10px 14px;
+      padding: 11px 14px;
       font-weight: 600;
       font-size: 0.875rem;
       cursor: pointer;
@@ -49,6 +49,25 @@
     .btn-primary:active { transform: scale(0.98); }
     .btn-secondary {
       color: #d8b4fe;
+      background: rgba(168,85,247,.12);
+      border: 1px solid rgba(168,85,247,.35);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .btn-secondary:active { transform: scale(0.98); }
+    .btn-secondary.active-filter {
+      background: rgba(168,85,247,.35);
+      border-color: #a855f7;
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 0.75rem;
+    }
+    .btn-filter {
+      color: #d8b4fe;
       background: rgba(168,85,247,.1);
       border: 1px solid rgba(168,85,247,.3);
       border-radius: 10px;
@@ -56,18 +75,11 @@
       font-weight: 500;
       font-size: 0.75rem;
       cursor: pointer;
-      touch-action: manipulation;
-    }
-    .btn-secondary.active-filter {
-      background: rgba(168,85,247,.35);
-      border-color: #a855f7;
-      color: #fff;
     }
     .task-row {
       border: 1px solid rgba(255,255,255,.08);
       background: rgba(8,8,16,.65);
       border-radius: 14px;
-      transition: border-color 0.2s;
     }
     .task-row.overdue {
       border-color: rgba(244, 63, 94, 0.45);
@@ -84,11 +96,11 @@
   <header class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
     <div>
       <h1 class="font-bold tracking-widest text-xl neon">AETHER</h1>
-      <p class="text-[10px] text-slate-400 font-mono tracking-widest">PERSONAL LIFE OS // v2.0</p>
+      <p class="text-[10px] text-slate-400 font-mono tracking-widest">PERSONAL LIFE OS // v2.1</p>
     </div>
     <div class="flex items-center gap-3">
-      <span id="connectionStatus" class="text-xs font-mono text-emerald-400">● ONLINE v2.0</span>
-      <button id="logoutButton" type="button" class="btn-secondary hidden">Cerrar sesión</button>
+      <span id="connectionStatus" class="text-xs font-mono text-emerald-400">● ONLINE v2.1</span>
+      <button id="logoutButton" type="button" class="btn-filter hidden">Cerrar sesión</button>
     </div>
   </header>
 
@@ -111,7 +123,7 @@
           </div>
           <div class="grid grid-cols-1 gap-3 pt-2">
             <button id="btnLogin" type="button" class="btn-primary w-full">1. Iniciar sesión</button>
-            <button id="btnSignup" type="button" class="btn-secondary w-full py-3">2. Crear cuenta nueva</button>
+            <button id="btnSignup" type="button" class="btn-secondary w-full text-center">2. Crear cuenta nueva</button>
           </div>
         </div>
         <div id="authMessageBox" class="hidden mt-4 p-3 rounded-xl border text-xs font-mono break-words"></div>
@@ -121,7 +133,6 @@
     <!-- APP SECTION -->
     <section id="appSection" class="hidden">
       <div class="grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-5 mt-2">
-        <!-- SIDEBAR -->
         <aside class="glass rounded-2xl p-4 h-fit">
           <div class="pb-3 border-b border-white/10">
             <p class="text-[10px] text-purple-400 font-mono">OPERADOR ACTIVO</p>
@@ -139,9 +150,7 @@
           </nav>
         </aside>
 
-        <!-- MAIN WORKSPACE -->
         <div class="space-y-5 min-w-0">
-          <!-- KPI METRICS -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div class="glass rounded-xl p-3.5">
               <p class="text-[10px] font-mono text-slate-400">PENDIENTES</p>
@@ -161,14 +170,13 @@
             </div>
           </div>
 
-          <!-- CREATE / EDIT FORM -->
           <section class="glass rounded-2xl p-5">
             <div class="flex items-center justify-between mb-4">
               <div>
                 <p class="text-[10px] font-mono text-purple-400 tracking-widest">CORE MODULE // 01</p>
                 <h2 id="formHeading" class="text-xl font-bold">Nueva Tarea</h2>
               </div>
-              <button id="cancelEditBtn" type="button" class="btn-secondary hidden">Cancelar edición</button>
+              <button id="cancelEditBtn" type="button" class="btn-filter hidden">Cancelar edición</button>
             </div>
 
             <input id="editTaskId" type="hidden" value="">
@@ -226,20 +234,18 @@
             </div>
           </section>
 
-          <!-- FILTERS & TASK LIST -->
           <section class="glass rounded-2xl p-5">
             <div class="flex flex-col gap-3 mb-4 pb-4 border-b border-white/10">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <h3 class="text-lg font-bold">Matriz de Tareas</h3>
                 <div class="flex flex-wrap gap-1.5">
-                  <button id="stAll" type="button" class="btn-secondary active-filter">Todas</button>
-                  <button id="stPending" type="button" class="btn-secondary">Pendientes</button>
-                  <button id="stProgress" type="button" class="btn-secondary">En curso</button>
-                  <button id="stCompleted" type="button" class="btn-secondary">Hechas</button>
+                  <button id="stAll" type="button" class="btn-filter active-filter">Todas</button>
+                  <button id="stPending" type="button" class="btn-filter">Pendientes</button>
+                  <button id="stProgress" type="button" class="btn-filter">En curso</button>
+                  <button id="stCompleted" type="button" class="btn-filter">Hechas</button>
                 </div>
               </div>
 
-              <!-- Search, Category, Priority & Sort -->
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1">
                 <input id="searchInput" class="field" type="text" placeholder="🔍 Buscar por título o nota...">
 
@@ -311,7 +317,6 @@
           (isErr ? "bg-rose-500/20 border-rose-500/50 text-rose-200" : "bg-emerald-500/15 border-emerald-500/40 text-emerald-200");
       }
 
-      // AUTHENTICATION
       async function runAuth(mode) {
         var email = el("authEmail").value.trim();
         var password = el("authPassword").value;
@@ -342,7 +347,7 @@
             } catch (e) {}
             openDashboard();
           } else {
-            setMsg("authMessageBox", "Cuenta creada. Pulsa ahora en 1. Iniciar sesión.", false);
+            setMsg("authMessageBox", "Cuenta creada correctamente. Pulsa ahora en '1. Iniciar sesión'.", false);
           }
         } catch (err) {
           setMsg("authMessageBox", "Error de red: " + err.message, true);
@@ -357,7 +362,6 @@
         fetchTasks();
       }
 
-      // FETCH TASKS
       async function fetchTasks() {
         if (!sessionToken) return;
         try {
@@ -380,7 +384,6 @@
         }
       }
 
-      // SAVE (INSERT OR UPDATE) TASK
       async function saveTask() {
         var title = el("taskTitle").value.trim();
         if (!title) {
@@ -423,10 +426,7 @@
 
           var data = await res.json();
           if (!res.ok) {
-            var hint = (data.message && data.message.indexOf("category") !== -1)
-              ? " (Ejecuta primero el comando ALTER TABLE en el SQL Editor de Supabase para añadir la columna category)."
-              : "";
-            setMsg("taskMessageBox", "Error guardando: " + (data.message || JSON.stringify(data)) + hint, true);
+            setMsg("taskMessageBox", "Error guardando: " + (data.message || JSON.stringify(data)), true);
             return;
           }
 
@@ -470,4 +470,9 @@
       }
 
       async function quickStatusChange(id, newStatus) {
-        await fetch(SUPABAS
+        await fetch(SUPABASE_URL + "/rest/v1/tasks?id=eq." + id, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY,
+            "Authorization": "B
