@@ -8,39 +8,13 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ["Inter", "sans-serif"],
-            display: ["Space Grotesk", "sans-serif"],
-            mono: ["JetBrains Mono", "monospace"]
-          }
-        }
-      }
-    };
-  </script>
-
   <style>
-    :root {
-      --purple: #a855f7;
-      --cyan: #06b6d4;
-    }
-
-    * {
-      box-sizing: border-box;
-      scrollbar-width: thin;
-      scrollbar-color: #633c91 #090914;
-    }
-
+    * { box-sizing: border-box; }
     body {
       min-height: 100vh;
       margin: 0;
@@ -52,97 +26,67 @@
         linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
       background-size: auto, auto, 36px 36px, 36px 36px;
-      font-family: Inter, sans-serif;
+      font-family: Inter, system-ui, sans-serif;
     }
-
     .glass {
       background: linear-gradient(155deg, rgba(20,20,35,.88), rgba(10,10,19,.94));
       border: 1px solid rgba(168,85,247,.25);
       backdrop-filter: blur(16px);
       box-shadow: 0 12px 35px rgba(0,0,0,.35);
     }
-
     .neon {
       color: #e9d5ff;
       text-shadow: 0 0 12px rgba(168,85,247,.75);
     }
-
     .neon-line {
       height: 2px;
       background: linear-gradient(90deg, transparent, #a855f7, #06b6d4, transparent);
       box-shadow: 0 0 14px rgba(168,85,247,.55);
     }
-
     .field {
       width: 100%;
       color: #f3f4f6;
-      background: rgba(3,3,10,.65);
+      background: rgba(3,3,10,.75);
       border: 1px solid rgba(168,85,247,.3);
       border-radius: 10px;
       padding: 11px 12px;
       outline: none;
     }
-
     .field:focus {
       border-color: #a855f7;
       box-shadow: 0 0 0 2px rgba(168,85,247,.15);
     }
-
     .btn-primary {
       color: white;
       background: linear-gradient(100deg, #7e22ce, #9333ea);
       border: 1px solid rgba(216,180,254,.35);
       border-radius: 10px;
-      padding: 10px 14px;
-      transition: .2s;
+      padding: 11px 14px;
       cursor: pointer;
     }
-
-    .btn-primary:hover:not(:disabled) {
-      filter: brightness(1.15);
-      box-shadow: 0 0 18px rgba(168,85,247,.3);
-    }
-
     .btn-secondary {
       color: #d8b4fe;
       background: rgba(168,85,247,.08);
       border: 1px solid rgba(168,85,247,.25);
       border-radius: 10px;
-      padding: 9px 12px;
+      padding: 10px 12px;
       cursor: pointer;
-      transition: .2s;
     }
-
-    .btn-secondary:hover:not(:disabled) {
-      background: rgba(168,85,247,.17);
-    }
-
     .btn-secondary.active-filter {
       background: rgba(168,85,247,.28);
       border-color: #a855f7;
       color: #ffffff;
     }
-
     .task-row {
       border: 1px solid rgba(255,255,255,.07);
       background: rgba(0,0,0,.25);
       border-radius: 12px;
-      transition: .2s;
     }
-
-    .task-row:hover {
-      border-color: rgba(168,85,247,.3);
-      background: rgba(168,85,247,.045);
-    }
-
     .task-row.completed .task-title {
       color: #64748b;
       text-decoration: line-through;
     }
-
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
   </style>
 </head>
 
@@ -155,63 +99,63 @@
         <i class="ph-fill ph-planet text-2xl text-purple-300"></i>
       </div>
       <div>
-        <h1 class="font-display font-bold tracking-[.2em] text-xl neon">AETHER</h1>
-        <p class="text-[10px] text-slate-500 font-mono tracking-widest">PERSONAL LIFE OS</p>
+        <h1 class="font-bold tracking-[.2em] text-xl neon">AETHER</h1>
+        <p class="text-[10px] text-slate-500 font-mono tracking-widest">PERSONAL LIFE OS v1.2</p>
       </div>
     </div>
 
     <div class="flex items-center gap-3">
-      <span id="connectionStatus" class="text-xs font-mono text-amber-400">
-        ● INITIALIZING...
+      <span id="connectionStatus" class="text-xs font-mono text-emerald-400">
+        ● CORE READY
       </span>
-      <button id="logoutButton" class="btn-secondary text-xs hidden" type="button">
-        <i class="ph ph-sign-out mr-1"></i> Cerrar sesión
+      <button id="logoutButton" onclick="handleLogout()" class="btn-secondary text-xs hidden" type="button">
+        Cerrar sesión
       </button>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
-    <!-- AUTH -->
+    <!-- AUTH SECTION -->
     <section id="authSection" class="max-w-md mx-auto mt-6 sm:mt-12">
       <div class="glass rounded-2xl p-6 sm:p-8">
         <div class="mb-6">
           <div class="flex items-center justify-between">
-            <p class="text-xs font-mono text-purple-400 tracking-widest">IDENTITY // ACCESS CONTROL</p>
+            <p class="text-xs font-mono text-purple-400 tracking-widest">IDENTITY // ACCESS</p>
             <span id="modeBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
               MODO: LOGIN
             </span>
           </div>
-          <h2 id="authHeading" class="font-display text-2xl font-bold mt-2">Iniciar sesión en AETHER</h2>
-          <p id="authSubtext" class="text-sm text-slate-400 mt-1">
-            Introduce tus credenciales o pulsa abajo para crear una cuenta nueva.
+          <h2 id="authHeading" class="text-2xl font-bold mt-2">Iniciar sesión en AETHER</h2>
+          <p class="text-sm text-slate-400 mt-1">
+            Conecta con tu base de datos privada de Supabase.
           </p>
         </div>
 
-        <form id="authForm" class="space-y-4" novalidate>
+        <div class="space-y-4">
           <div>
             <label for="authEmail" class="block text-xs text-slate-400 mb-2">Email</label>
-            <input id="authEmail" class="field" type="email" autocomplete="email" required placeholder="tu@email.com">
+            <input id="authEmail" class="field" type="email" autocomplete="email" placeholder="tu@email.com">
           </div>
 
           <div>
             <label for="authPassword" class="block text-xs text-slate-400 mb-2">Contraseña (mín. 6 caracteres)</label>
-            <input id="authPassword" class="field" type="password" autocomplete="current-password" minlength="6" required placeholder="••••••••">
+            <input id="authPassword" class="field" type="password" autocomplete="current-password" placeholder="••••••••">
           </div>
 
-          <button id="authSubmit" class="btn-primary w-full font-semibold" type="submit">
+          <button id="authSubmit" onclick="handleAuthSubmit()" class="btn-primary w-full font-semibold" type="button">
             Iniciar sesión
           </button>
-        </form>
 
-        <button id="toggleAuthMode" class="btn-secondary w-full text-sm mt-3 font-medium" type="button">
-          ¿No tienes cuenta? Cambiar a Crear cuenta
-        </button>
+          <button id="toggleAuthMode" onclick="toggleMode()" class="btn-secondary w-full text-sm font-medium" type="button">
+            ¿No tienes cuenta? Cambiar a Crear cuenta
+          </button>
+        </div>
 
         <div id="authMessageBox" class="hidden mt-4 p-3 rounded-xl border text-xs font-mono break-words"></div>
       </div>
     </section>
 
-    <!-- APP -->
+    <!-- APP SECTION -->
     <section id="appSection" class="hidden">
       <div class="grid grid-cols-1 lg:grid-cols-[230px_minmax(0,1fr)] gap-5 mt-4">
         <aside class="glass rounded-2xl p-4 h-fit">
@@ -222,8 +166,7 @@
 
           <nav class="mt-4 space-y-2">
             <button class="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-200 text-sm">
-              <i class="ph-duotone ph-check-square-offset text-lg"></i>
-              Tasks
+              <span>Tasks</span>
               <span id="sidebarTaskCount" class="ml-auto text-xs font-mono text-purple-300">0</span>
             </button>
           </nav>
@@ -234,8 +177,8 @@
             <div class="flex flex-wrap justify-between items-start gap-4">
               <div>
                 <p class="text-xs font-mono text-purple-400 tracking-widest">CORE MODULE // 01</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-bold mt-2">Task Matrix</h2>
-                <p class="text-sm text-slate-400 mt-2">Tus tareas privadas sincronizadas con Supabase.</p>
+                <h2 class="text-2xl sm:text-3xl font-bold mt-2">Task Matrix</h2>
+                <p class="text-sm text-slate-400 mt-2">Sincronizado directamente con Supabase.</p>
               </div>
 
               <div class="text-right">
@@ -246,14 +189,14 @@
 
             <div class="neon-line mt-5 mb-5 opacity-60"></div>
 
-            <form id="taskForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div class="sm:col-span-2 lg:col-span-2">
-                <label for="taskTitle" class="block text-xs text-slate-400 mb-2">Nombre de la tarea *</label>
-                <input id="taskTitle" class="field" type="text" maxlength="180" required placeholder="Ej. Estudiar cálculo">
+                <label class="block text-xs text-slate-400 mb-2">Nombre de la tarea *</label>
+                <input id="taskTitle" class="field" type="text" maxlength="180" placeholder="Ej. Estudiar cálculo">
               </div>
 
               <div>
-                <label for="taskPriority" class="block text-xs text-slate-400 mb-2">Prioridad</label>
+                <label class="block text-xs text-slate-400 mb-2">Prioridad</label>
                 <select id="taskPriority" class="field">
                   <option value="low">Baja</option>
                   <option value="medium" selected>Media</option>
@@ -262,34 +205,34 @@
               </div>
 
               <div>
-                <label for="taskDueDate" class="block text-xs text-slate-400 mb-2">Fecha límite</label>
+                <label class="block text-xs text-slate-400 mb-2">Fecha límite</label>
                 <input id="taskDueDate" class="field" type="date">
               </div>
 
               <div class="sm:col-span-2 lg:col-span-4">
-                <label for="taskDescription" class="block text-xs text-slate-400 mb-2">Descripción (opcional)</label>
+                <label class="block text-xs text-slate-400 mb-2">Descripción (opcional)</label>
                 <input id="taskDescription" class="field" type="text" maxlength="1000" placeholder="Detalles o contexto">
               </div>
 
               <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
-                <button id="addTaskButton" class="btn-primary font-semibold" type="submit">
-                  <i class="ph ph-plus mr-1"></i> Añadir tarea
+                <button id="addTaskButton" onclick="handleCreateTask()" class="btn-primary font-semibold" type="button">
+                  + Añadir tarea
                 </button>
               </div>
-            </form>
+            </div>
           </section>
 
           <section class="glass rounded-2xl p-5 sm:p-7">
             <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
               <div>
                 <p class="text-xs font-mono text-cyan-400 tracking-widest">DATABASE // LIVE DATA</p>
-                <h3 class="font-display text-xl font-bold mt-1">Tus tareas</h3>
+                <h3 class="text-xl font-bold mt-1">Tus tareas</h3>
               </div>
 
               <div class="flex gap-2">
-                <button id="filterAll" class="btn-secondary active-filter text-xs" type="button">Todas</button>
-                <button id="filterPending" class="btn-secondary text-xs" type="button">Pendientes</button>
-                <button id="filterCompleted" class="btn-secondary text-xs" type="button">Hechas</button>
+                <button id="filterAll" onclick="changeFilter('all')" class="btn-secondary active-filter text-xs" type="button">Todas</button>
+                <button id="filterPending" onclick="changeFilter('pending')" class="btn-secondary text-xs" type="button">Pendientes</button>
+                <button id="filterCompleted" onclick="changeFilter('completed')" class="btn-secondary text-xs" type="button">Hechas</button>
               </div>
             </div>
 
@@ -297,7 +240,6 @@
             <div id="taskList" class="space-y-3"></div>
 
             <div id="emptyState" class="hidden text-center py-12">
-              <i class="ph-duotone ph-check-circle text-4xl text-purple-400"></i>
               <p class="text-slate-300 mt-3">No hay tareas en esta vista.</p>
               <p class="text-xs text-slate-500 mt-1">Añade una tarea arriba para guardarla en Supabase.</p>
             </div>
@@ -308,212 +250,263 @@
   </main>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const SUPABASE_URL = "https://dzyhecukaiujbuvsemtf.supabase.co";
-      const SUPABASE_KEY = "sb_publishable_Iv1sS0zzisomBIRZwp_GwA_dPWksAwl";
+    const SUPABASE_URL = "https://dzyhecukaiujbuvsemtf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_Iv1sS0zzisomBIRZwp_GwA_dPWksAwl";
 
-      const $ = (id) => document.getElementById(id);
+    let authMode = "login";
+    let sessionToken = localStorage.getItem("aether_token") || null;
+    let currentUser = JSON.parse(localStorage.getItem("aether_user") || "null");
+    let tasks = [];
+    let currentFilter = "all";
 
-      let supabaseClient = null;
-      let currentUser = null;
-      let tasks = [];
-      let currentFilter = "all";
-      let authMode = "login";
-      let busy = false;
+    function $(id) { return document.getElementById(id); }
 
-      function showBoxMessage(boxId, message, type = "info") {
-        const box = $(boxId);
-        if (!message) {
-          box.classList.add("hidden");
-          box.textContent = "";
-          return;
-        }
-        box.classList.remove("hidden");
-        box.textContent = message;
-
-        if (type === "error") {
-          box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-rose-500/10 border-rose-500/40 text-rose-300";
-        } else if (type === "success") {
-          box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-emerald-500/10 border-emerald-500/40 text-emerald-300";
-        } else {
-          box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-purple-500/10 border-purple-500/40 text-purple-200";
-        }
-      }
-
-      function setConnectionStatus(message, color = "text-slate-400") {
-        $("connectionStatus").className = "text-xs font-mono " + color;
-        $("connectionStatus").textContent = message;
-      }
-
-      function setBusy(value) {
-        busy = value;
-        $("authSubmit").disabled = value;
-        $("toggleAuthMode").disabled = value;
-        $("addTaskButton").disabled = value;
-        $("authSubmit").classList.toggle("opacity-50", value);
-        $("addTaskButton").classList.toggle("opacity-50", value);
-      }
-
-      function setAuthMode(mode) {
-        authMode = mode;
-        const isLogin = mode === "login";
-
-        $("modeBadge").textContent = isLogin ? "MODO: LOGIN" : "MODO: REGISTRO";
-        $("authHeading").textContent = isLogin ? "Iniciar sesión en AETHER" : "Crear cuenta nueva";
-        $("authSubmit").textContent = isLogin ? "Iniciar sesión" : "Registrar mi cuenta";
-        $("toggleAuthMode").textContent = isLogin
-          ? "¿No tienes cuenta? Cambiar a Crear cuenta"
-          : "¿Ya tienes cuenta? Cambiar a Iniciar sesión";
-        $("authPassword").autocomplete = isLogin ? "current-password" : "new-password";
-
-        showBoxMessage("authMessageBox", "");
-      }
-
-      // 1. Registrar eventos de interfaz inmediatamente (nunca se bloquean)
-      $("toggleAuthMode").addEventListener("click", () => {
-        setAuthMode(authMode === "login" ? "signup" : "login");
-      });
-
-      // 2. Comprobar que la librería de Supabase cargó desde el CDN
-      if (!window.supabase || typeof window.supabase.createClient !== "function") {
-        setConnectionStatus("● SDK BLOCKED", "text-rose-400");
-        showBoxMessage(
-          "authMessageBox",
-          "ERROR CRÍTICO: El navegador ha bloqueado la librería de Supabase (cdn.jsdelivr.net). Desactiva bloqueadores de anuncios o abre la web en otra pestaña.",
-          "error"
-        );
+    function showMsg(boxId, text, type) {
+      const box = $(boxId);
+      if (!box) return;
+      if (!text) {
+        box.classList.add("hidden");
         return;
       }
+      box.classList.remove("hidden");
+      box.textContent = text;
+      if (type === "error") {
+        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-rose-500/15 border-rose-500/40 text-rose-300";
+      } else if (type === "success") {
+        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-emerald-500/15 border-emerald-500/40 text-emerald-300";
+      } else {
+        box.className = "mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-purple-500/15 border-purple-500/40 text-purple-200";
+      }
+    }
+
+    window.onerror = function(msg, _url, line) {
+      showMsg("authMessageBox", "Error JS (Línea " + line + "): " + msg, "error");
+    };
+
+    function toggleMode() {
+      authMode = (authMode === "login") ? "signup" : "login";
+      const isLogin = (authMode === "login");
+      $("modeBadge").textContent = isLogin ? "MODO: LOGIN" : "MODO: REGISTRO";
+      $("authHeading").textContent = isLogin ? "Iniciar sesión en AETHER" : "Crear cuenta nueva";
+      $("authSubmit").textContent = isLogin ? "Iniciar sesión" : "Registrar mi cuenta ahora";
+      $("toggleAuthMode").textContent = isLogin
+        ? "¿No tienes cuenta? Cambiar a Crear cuenta"
+        : "¿Ya tienes cuenta? Cambiar a Iniciar sesión";
+      showMsg("authMessageBox", isLogin ? "" : "Modo Registro activo: escribe tu correo y contraseña y pulsa 'Registrar mi cuenta ahora'.", "info");
+    }
+
+    async function handleAuthSubmit() {
+      const email = $("authEmail").value.trim();
+      const password = $("authPassword").value;
+
+      if (!email || !password) {
+        showMsg("authMessageBox", "Escribe tu correo y contraseña primero.", "error");
+        return;
+      }
+      if (password.length < 6) {
+        showMsg("authMessageBox", "La contraseña debe tener mínimo 6 caracteres.", "error");
+        return;
+      }
+
+      $("authSubmit").disabled = true;
+      showMsg("authMessageBox", "Conectando con Supabase...", "info");
 
       try {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const endpoint = (authMode === "login")
+          ? "/auth/v1/token?grant_type=password"
+          : "/auth/v1/signup";
+
+        const res = await fetch(SUPABASE_URL + endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY
+          },
+          body: JSON.stringify({ email: email, password: password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          const errDesc = data.msg || data.error_description || data.message || JSON.stringify(data);
+          throw new Error(errDesc);
+        }
+
+        if (data.access_token && data.user) {
+          sessionToken = data.access_token;
+          currentUser = data.user;
+          localStorage.setItem("aether_token", sessionToken);
+          localStorage.setItem("aether_user", JSON.stringify(currentUser));
+          enterApp();
+        } else if (data.id || data.user) {
+          showMsg("authMessageBox", "¡Cuenta registrada! Pero en Supabase te faltó pulsar el botón verde 'Save changes' al desactivar Confirm Email. Ve a Supabase, pulsa Save changes, o confirma el correo que te ha llegado.", "success");
+          authMode = "login";
+        } else {
+          showMsg("authMessageBox", "Respuesta recibida. Cambia a Iniciar sesión y entra.", "success");
+        }
       } catch (err) {
-        setConnectionStatus("● INIT ERROR", "text-rose-400");
-        showBoxMessage("authMessageBox", "Error al inicializar cliente Supabase: " + err.message, "error");
+        let msg = err.message;
+        if (msg.includes("Invalid login credentials")) {
+          msg = "Ese usuario no existe aún o la contraseña no coincide. Pulsa primero el botón de abajo ('Cambiar a Crear cuenta') para registrarte.";
+        }
+        showMsg("authMessageBox", "Error: " + msg, "error");
+      } finally {
+        $("authSubmit").disabled = false;
+      }
+    }
+
+    function enterApp() {
+      $("authSection").classList.add("hidden");
+      $("appSection").classList.remove("hidden");
+      $("logoutButton").classList.remove("hidden");
+      $("userEmail").textContent = currentUser.email || "Usuario activo";
+      $("connectionStatus").textContent = "● SUPABASE ONLINE";
+      loadTasks();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem("aether_token");
+      localStorage.removeItem("aether_user");
+      sessionToken = null;
+      currentUser = null;
+      tasks = [];
+      $("appSection").classList.add("hidden");
+      $("logoutButton").classList.add("hidden");
+      $("authSection").classList.remove("hidden");
+      $("connectionStatus").textContent = "● SIGNED OUT";
+    }
+
+    async function loadTasks() {
+      if (!sessionToken || !currentUser) return;
+      showMsg("taskMessageBox", "Cargando tareas...", "info");
+
+      try {
+        const res = await fetch(SUPABASE_URL + "/rest/v1/tasks?select=*&order=created_at.desc", {
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + sessionToken
+          }
+        });
+
+        if (res.status === 401) {
+          handleLogout();
+          showMsg("authMessageBox", "Tu sesión ha expirado. Inicia sesión de nuevo.", "error");
+          return;
+        }
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Error al leer tareas");
+
+        tasks = Array.isArray(data) ? data : [];
+        showMsg("taskMessageBox", "");
+        renderTasks();
+      } catch (err) {
+        showMsg("taskMessageBox", "Error cargando: " + err.message, "error");
+      }
+    }
+
+    async function handleCreateTask() {
+      const title = $("taskTitle").value.trim();
+      const description = $("taskDescription").value.trim();
+      const priority = $("taskPriority").value;
+      const dueDate = $("taskDueDate").value || null;
+
+      if (!title) {
+        showMsg("taskMessageBox", "Escribe un nombre para la tarea.", "error");
         return;
       }
 
-      function showAuth() {
-        $("authSection").classList.remove("hidden");
-        $("appSection").classList.add("hidden");
-        $("logoutButton").classList.add("hidden");
-      }
+      $("addTaskButton").disabled = true;
+      showMsg("taskMessageBox", "Guardando en Supabase...", "info");
 
-      async function showApp(user) {
-        if (currentUser && currentUser.id === user.id && !$("appSection").classList.contains("hidden")) {
-          return; // Evita doble carga por onAuthStateChange
-        }
-        currentUser = user;
-        $("authSection").classList.add("hidden");
-        $("appSection").classList.remove("hidden");
-        $("logoutButton").classList.remove("hidden");
-        $("userEmail").textContent = user.email || "Sesión activa";
-        setConnectionStatus("● SUPABASE ONLINE", "text-emerald-400");
-        await loadTasks();
-      }
-
-      // 3. Manejo de Login y Registro con diagnóstico claro
-      $("authForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
-        if (busy) return;
-
-        const email = $("authEmail").value.trim();
-        const password = $("authPassword").value;
-
-        if (!email || !password) {
-          showBoxMessage("authMessageBox", "Debes escribir un email válido y una contraseña.", "error");
-          return;
-        }
-        if (password.length < 6) {
-          showBoxMessage("authMessageBox", "La contraseña debe tener al menos 6 caracteres.", "error");
-          return;
-        }
-
-        setBusy(true);
-        showBoxMessage(
-          "authMessageBox",
-          authMode === "login" ? "Verificando credenciales en Supabase..." : "Creando usuario en Supabase...",
-          "info"
-        );
-
-        try {
-          if (authMode === "login") {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) throw error;
-            if (data.user) await showApp(data.user);
-          } else {
-            const { data, error } = await supabaseClient.auth.signUp({ email, password });
-            if (error) throw error;
-
-            if (data.session && data.user) {
-              await showApp(data.user);
-            } else {
-              showBoxMessage(
-                "authMessageBox",
-                "¡CUENTA CREADA! Pero Supabase tiene activada la confirmación por correo. Revisa tu bandeja de entrada (y Spam) o desactiva 'Confirm email' en Supabase -> Authentication -> Providers -> Email.",
-                "success"
-              );
-              setAuthMode("login");
-            }
-          }
-        } catch (error) {
-          let msg = error.message || "Error desconocido de autenticación.";
-          if (msg.includes("Invalid login credentials")) {
-            msg = "Credenciales incorrectas o cuenta no registrada aún. Si es tu primera vez, pulsa abajo en 'Cambiar a Crear cuenta' y regístrate primero.";
-          } else if (msg.includes("Email not confirmed")) {
-            msg = "Tu cuenta existe pero no has confirmado el email. Abre el enlace que te envió Supabase por correo o desactiva 'Confirm email' en el panel de Supabase.";
-          } else if (msg.includes("apikey") || msg.includes("JWT")) {
-            msg = "Error de API Key (" + msg + "). Ve a Supabase -> Project Settings -> API y usa la clave 'anon public' tradicional (empieza por eyJ...).";
-          }
-          showBoxMessage("authMessageBox", msg, "error");
-        } finally {
-          setBusy(false);
-        }
-      });
-
-      $("logoutButton").addEventListener("click", async () => {
-        await supabaseClient.auth.signOut();
-        currentUser = null;
-        tasks = [];
-        showAuth();
-        setConnectionStatus("● SIGNED OUT", "text-slate-400");
-      });
-
-      async function loadTasks() {
-        if (!currentUser) return;
-        showBoxMessage("taskMessageBox", "Sincronizando tareas...", "info");
-
-        const { data, error } = await supabaseClient
-          .from("tasks")
-          .select("id, user_id, title, description, status, priority, due_date, created_at")
-          .order("created_at", { ascending: false });
-
-        if (error) {
-          showBoxMessage("taskMessageBox", "Error cargando tareas: " + error.message, "error");
-          return;
-        }
-
-        tasks = data || [];
-        showBoxMessage("taskMessageBox", "");
-        renderTasks();
-      }
-
-      $("taskForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
-        if (!currentUser || busy) return;
-
-        const title = $("taskTitle").value.trim();
-        const description = $("taskDescription").value.trim();
-        const priority = $("taskPriority").value;
-        const dueDate = $("taskDueDate").value || null;
-
-        if (!title) {
-          showBoxMessage("taskMessageBox", "Escribe el nombre de la tarea.", "error");
-          return;
-        }
-
-        setBusy(true);
-        try {
-          const { error } = await supabaseClient.from("tasks").insert({
+      try {
+        const res = await fetch(SUPABASE_URL + "/rest/v1/tasks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + sessionToken,
+            "Prefer": "return=representation"
+          },
+          body: JSON.stringify({
             user_id: currentUser.id,
-            title,
+            title: title,
+            description: description,
+            status: "pending",
+            priority: priority,
+            due_date: dueDate
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "No se pudo insertar");
+
+        $("taskTitle").value = "";
+        $("taskDescription").value = "";
+        $("taskDueDate").value = "";
+        $("taskPriority").value = "medium";
+        await loadTasks();
+      } catch (err) {
+        showMsg("taskMessageBox", "Error al guardar: " + err.message, "error");
+      } finally {
+        $("addTaskButton").disabled = false;
+      }
+    }
+
+    async function toggleTaskStatus(taskId, completed) {
+      try {
+        await fetch(SUPABASE_URL + "/rest/v1/tasks?id=eq." + taskId, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + sessionToken
+          },
+          body: JSON.stringify({ status: completed ? "completed" : "pending" })
+        });
+        await loadTasks();
+      } catch (err) {
+        showMsg("taskMessageBox", "Error actualizando: " + err.message, "error");
+      }
+    }
+
+    async function removeTask(taskId) {
+      try {
+        await fetch(SUPABASE_URL + "/rest/v1/tasks?id=eq." + taskId, {
+          method: "DELETE",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + sessionToken
+          }
+        });
+        await loadTasks();
+      } catch (err) {
+        showMsg("taskMessageBox", "Error borrando: " + err.message, "error");
+      }
+    }
+
+    function changeFilter(filter) {
+      currentFilter = filter;
+      $("filterAll").classList.toggle("active-filter", filter === "all");
+      $("filterPending").classList.toggle("active-filter", filter === "pending");
+      $("filterCompleted").classList.toggle("active-filter", filter === "completed");
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const list = $("taskList");
+      list.innerHTML = "";
+
+      const filtered = tasks.filter(function(t) {
+        if (currentFilter === "pending") return t.status !== "completed";
+        if (currentFilter === "completed") return t.status === "completed";
+        return true;
+      });
+
+      $("pendingCount").textContent = tasks.filter(function(t) { return t.status !== "completed"; }).length;
+      $("sidebarTaskCount").textContent = tasks.length;
+      $("emptyState").classList.toggle("hidden", filtered.length > 0);
+
+      filtered.forEach(function(task) {
+        const completed = (task.status === "completed");
+        const row = document.createElement("article
