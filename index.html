@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AETHER // Personal Life OS v2.0</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./app.js" defer></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: #f3f4f6;
+      background-color: #05050a;
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.15), transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.10), transparent 40%);
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .glass {
+      background: rgba(14, 14, 26, 0.92);
+      border: 1px solid rgba(168, 85, 247, 0.28);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+    }
+
+    .neon {
+      color: #e9d5ff;
+      text-shadow: 0 0 12px rgba(168, 85, 247, 0.75);
+    }
+
+    .neon-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #a855f7, #06b6d4, transparent);
+    }
+
+    .field {
+      width: 100%;
+      color: #f3f4f6;
+      background: #080812;
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 0.875rem;
+      outline: none;
+    }
+
+    .field:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
+    }
+
+    .btn-primary {
+      color: #ffffff;
+      background: linear-gradient(100deg, #7e22ce, #9333ea);
+      border: 1px solid rgba(216, 180, 254, 0.4);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      color: #d8b4fe;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-filter {
+      color: #d8b4fe;
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 500;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .btn-filter.active-filter {
+      background: rgba(168, 85, 247, 0.35);
+      border-color: #a855f7;
+      color: #ffffff;
+    }
+
+    .task-row {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 8, 16, 0.65);
+      border-radius: 14px;
+    }
+
+    .task-row.overdue {
+      border-color: rgba(244, 63, 94, 0.45);
+      background: rgba(244, 63, 94, 0.04);
+    }
+
+    .task-row.completed {
+      opacity: 0.65;
+    }
+
+    .task-row.completed .task-title {
+      color: #64748b;
+      text-decoration: line-through;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="neon-line w-full"></div>
+
+  <header class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div>
+      <h1 class="font-bold tracking-widest text-xl neon">AETHER</h1>
+      <p class="text-[10px] text-slate-400 font-mono tracking-widest">PERSONAL LIFE OS // v2.0</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="connectionStatus" class="text-xs font-mono text-amber-400">● FALTA APP.JS</span>
+      <button id="logoutButton" type="button" class="btn-filter hidden">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 pb-16">
+    <!-- SECCIÓN DE ACCESO -->
+    <section id="authSection" class="max-w-md mx-auto mt-6">
+      <div class="glass rounded-2xl p-6">
+        <p class="text-xs font-mono text-purple-400 tracking-widest">IDENTITY // ACCESS</p>
+        <h2 class="text-2xl font-bold mt-1">Acceso a AETHER</h2>
+        <p class="text-xs text-slate-400 mt-1 mb-5">Introduce tu email y contraseña:</p>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Email</label>
+            <input id="authEmail" class="field" type="email" placeholder="tu@email.com">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Contraseña (mín. 6 caracteres)</label>
+            <input id="authPassword" class="field" type="password" placeholder="••••••••">
+          </div>
+          <div class="grid grid-cols-1 gap-3 pt-2">
+            <button id="btnLogin" type="button" class="btn-primary w-full">1. Iniciar sesión</button>
+            <button id="btnSignup" type="button" class="btn-secondary w-full">2. Crear cuenta nueva</button>
+          </div>
+        </div>
+
+        <div id="authMessageBox" class="mt-4 p-3 rounded-xl border text-xs font-mono break-words bg-purple-500/10 border-purple-500/30 text-purple-200">
+          Sistema listo. Introduce tus datos arriba.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN PRINCIPAL -->
+    <section id="appSection" class="hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-5 mt-2">
+        <aside class="glass rounded-2xl p-4 h-fit">
+          <div class="pb-3 border-b border-white/10">
+            <p class="text-[10px] text-purple-400 font-mono">SESIÓN ACTIVA</p>
+            <p id="userEmail" class="text-xs text-slate-200 mt-1 break-all font-mono"></p>
+          </div>
+          <nav class="mt-4 space-y-2 text-xs">
+            <div class="px-3 py-2.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-200 font-semibold flex justify-between">
+              <span>01 // Tasks</span>
+              <span id="sidebarTaskCount" class="font-mono">0</span>
+            </div>
+            <div class="px-3 py-2 text-slate-500 flex justify-between"><span>02 // Goals</span><span>FASE 3</span></div>
+            <div class="px-3 py-2 text-slate-500 flex justify-between"><span>03 // Habits</span><span>FASE 4</span></div>
+            <div class="px-3 py-2 text-slate-500 flex justify-between"><span>04 // Calendar</span><span>FASE 5</span></div>
+          </nav>
+        </aside>
+
+        <div class="space-y-5 min-w-0">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="glass rounded-xl p-3.5"><p class="text-[10px] font-mono text-slate-400">PENDIENTES</p><p id="kpiPending" class="text-2xl font-mono font-bold text-purple-300 mt-1">0</p></div>
+            <div class="glass rounded-xl p-3.5"><p class="text-[10px] font-mono text-cyan-400">EN CURSO</p><p id="kpiInProgress" class="text-2xl font-mono font-bold text-cyan-300 mt-1">0</p></div>
+            <div class="glass rounded-xl p-3.5"><p class="text-[10px] font-mono text-emerald-400">COMPLETADAS</p><p id="kpiCompleted" class="text-2xl font-mono font-bold text-emerald-300 mt-1">0</p></div>
+            <div class="glass rounded-xl p-3.5"><p class="text-[10px] font-mono text-rose-400">VENCIDAS</p><p id="kpiOverdue" class="text-2xl font-mono font-bold text-rose-400 mt-1">0</p></div>
+          </div>
+
+          <section class="glass rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h2 id="formHeading" class="text-xl font-bold">Nueva Tarea</h2>
+              <button id="cancelEditBtn" type="button" class="btn-filter hidden">Cancelar edición</button>
+            </div>
+            <input id="editTaskId" type="hidden" value="">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <input id="taskTitle" class="field sm:col-span-2" type="text" placeholder="Título de la tarea *">
+              <select id="taskCategory" class="field">
+                <option value="universidad">🎓 Universidad</option>
+                <option value="entrenamiento">💪 Entrenamiento</option>
+                <option value="proyectos">⚡ Proyectos</option>
+                <option value="personal">🏠 Personal</option>
+                <option value="general" selected>📌 General</option>
+              </select>
+              <select id="taskPriority" class="field">
+                <option value="low">🟢 Prioridad Baja</option>
+                <option value="medium" selected>🟡 Prioridad Media</option>
+                <option value="high">🔴 Prioridad Alta</option>
+              </select>
+              <select id="taskStatus" class="field">
+                <option value="pending" selected>⏳ Pendiente</option>
+                <option value="in_progress">⚡ En curso</option>
+                <option value="completed">✅ Completada</option>
+              </select>
+              <input id="taskDueDate" class="field" type="date">
+              <input id="taskDescription" class="field sm:col-span-2" type="text" placeholder="Descripción o notas (opcional)">
+              <button id="saveTaskButton" type="button" class="btn-primary sm:col-span-2 lg:col-span-4">+ Guardar tarea en Supabase</button>
+            </div>
+          </section>
+
+          <section class="glass rounded-2xl p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h3 class="text-lg font-bold">Matriz de Tareas</h3>
+              <div class="flex flex-wrap gap-1.5">
+                <button id="stAll" type="button" class="btn-filter active-filter">Todas</button>
+                <button id="stPending" type="button" class="btn-filter">Pendientes</button>
+                <button id="stProgress" type="button" class="btn-filter">En curso</button>
+                <button id="stCompleted" type="button" class="btn-filter">Hechas</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mb-4">
+              <input id="searchInput" class="field" type="text" placeholder="🔍 Buscar tarea...">
+              <select id="filterCategory" class="field">
+                <option value="all">Categoría: Todas</option>
+                <option value="universidad">🎓 Universidad</option>
+                <option value="entrenamiento">💪 Entrenamiento</option>
+                <option value="proyectos">⚡ Proyectos</option>
+                <option value="personal">🏠 Personal</option>
+                <option value="general">📌 General</option>
+              </select>
+              <select id="filterPriority" class="field">
+                <option value="all">Prioridad: Todas</option>
+                <option value="high">🔴 Solo Alta</option>
+                <option value="medium">🟡 Solo Media</option>
+                <option value="low">🟢 Solo Baja</option>
+              </select>
+              <select id="sortBy" class="field">
+                <option value="created_desc">Orden: Más recientes</option>
+                <option value="due_asc">Orden: Fecha límite</option>
+                <option value="priority_desc">Orden: Mayor prioridad</option>
+              </select>
+            </div>
+            <div id="taskMessageBox" class="hidden mb-4 p-3 rounded-xl border text-xs font-mono break-words"></div>
+            <div id="taskList" class="space-y-3"></div>
+            <p id="emptyState" class="hidden text-center text-slate-400 py-10 text-sm">No hay tareas en esta vista.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
