@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AETHER // Personal Life OS v2.0</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="./app.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./app.js?v=3" defer></script>
   <style>
     * {
       box-sizing: border-box;
@@ -137,7 +138,7 @@
       <p class="text-[10px] text-slate-400 font-mono tracking-widest">PERSONAL LIFE OS // v2.0</p>
     </div>
     <div class="flex items-center gap-3">
-      <span id="connectionStatus" class="text-xs font-mono text-amber-400">● FALTA APP.JS</span>
+      <span id="connectionStatus" class="text-xs font-mono text-amber-400">● CARGANDO</span>
       <button id="logoutButton" type="button" class="btn-filter hidden">Cerrar sesión</button>
     </div>
   </header>
@@ -271,3 +272,4 @@
   </main>
 </body>
 </html>
+
