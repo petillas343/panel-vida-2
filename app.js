@@ -47,11 +47,20 @@
   async function save(){const title=$("taskTitle").value.trim();if(!title){msg("Escribe un título para la tarea.",true);return;}const id=$("editTaskId").value,status=$("taskStatus").value,payload={title,description:$("taskDescription").value.trim(),category:$("taskCategory").value,priority:$("taskPriority").value,status,due_date:$("taskDueDate").value||null,completed_at:status==="completed"?(tasks.find(t=>t.id===id)?.completed_at||new Date().toISOString()):null};msg("Guardando…");let r=id?await db.from("tasks").update(payload).eq("id",id).eq("user_id",user.id):await db.from("tasks").insert(payload);if(r.error){msg("No se pudo guardar. Comprueba que aplicaste la migración completed_at: "+err(r.error),true);return;}reset();await load();msg("Tarea guardada.");}
   async function update(t,p){const {error}=await db.from("tasks").update(p).eq("id",t.id).eq("user_id",user.id);if(error)msg("No se pudo actualizar: "+err(error),true);else await load();}
   async function remove(t){if(!confirm("¿Borrar «"+t.title+"»?"))return;const {error}=await db.from("tasks").delete().eq("id",t.id).eq("user_id",user.id);if(error)msg("No se pudo borrar: "+err(error),true);else await load();}
+  function showPanel(session){const gate=$("authGate"),shell=$("appShell");if(session&&session.user){user=session.user;gate.classList.add("hidden");shell.classList.remove("hidden");load();}else{user=null;tasks=[];shell.classList.add("hidden");gate.classList.remove("hidden");}}
+  async function login(event){event.preventDefault();const button=$("loginButton"),notice=$("loginMessage");button.disabled=true;button.textContent="Entrando…";notice.textContent="Conectando con Supabase…";const {data,error}=await db.auth.signInWithPassword({email:$("loginEmail").value.trim(),password:$("loginPassword").value});button.disabled=false;button.textContent="Entrar";if(error){notice.textContent="No se pudo iniciar sesión: "+err(error);return;}notice.textContent="Sesión iniciada.";showPanel(data.session);}
+  function bootAuth(){
+    if(!db){$("loginMessage").textContent="No se pudo cargar Supabase.";return;}
+    if(booted)return;booted=true;
+    $("loginForm").addEventListener("submit",login);
+    $("logoutButton").onclick=async()=>{const {error}=await db.auth.signOut();if(error)$("loginMessage").textContent=err(error);showPanel(null);};
+    db.auth.onAuthStateChange((event,session)=>setTimeout(()=>showPanel(session),0));
+    db.auth.getSession().then(({data,error})=>{if(error){$("loginMessage").textContent=err(error);showPanel(null);}else showPanel(data.session);});
+  }
   window.initAetherTasks=function(){
-    if(!db){msg("No se pudo cargar Supabase.",true);return;}
+    if(!db)return;
     $("saveTaskButton").onclick=save;$("cancelEditBtn").onclick=reset;$("searchInput").oninput=render;$("filterCategory").onchange=render;$("sortBy").onchange=render;
     [["stAll","all"],["stPending","pending"],["stProgress","in_progress"],["stCompleted","completed"]].forEach(([id,value])=>$(id).onclick=()=>{filterStatus=value;render();});
-    if(!booted){booted=true;db.auth.onAuthStateChange((event,session)=>{setTimeout(()=>{user=session?.user||null;if(user){$("taskAuthPanel")?.classList.add("hidden");$("taskWorkspace")?.classList.remove("hidden");load();}else{$("taskAuthPanel")?.classList.remove("hidden");$("taskWorkspace")?.classList.add("hidden");tasks=[];render();}},0);});db.auth.getSession().then(({data})=>{user=data.session?.user||null;if(user){$("taskAuthPanel")?.classList.add("hidden");$("taskWorkspace")?.classList.remove("hidden");load();}});}
     if(user)load();
   };
-})();
+  bootAuth();})();
