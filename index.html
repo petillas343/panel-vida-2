@@ -276,7 +276,7 @@
   </button>
 
   <!-- MAIN APPLICATION WRAPPER -->
-  <div id="appShell" class="hidden flex-1 w-full lg:h-[calc(100vh-2px)] relative overflow-hidden">
+  <div id="appShell" class="hidden flex flex-1 w-full lg:h-[calc(100vh-2px)] relative overflow-hidden">
 
     <!-- ================= COLLAPSIBLE & HIDEABLE SIDEBAR ================= -->
     <aside id="appSidebar" 
@@ -1180,16 +1180,6 @@
         footer: 'PURPLE LED CHANNEL // PRIVATE TASK SYNC ONLINE',
         render: () => `
           <div class="space-y-5">
-            <section id="taskAuthPanel" class="p-5 rounded-xl bg-black/45 border border-purple-500/35">
-              <p class="text-[10px] font-mono tracking-widest text-purple-300">IDENTITY // SUPABASE</p>
-              <p class="mt-1 text-sm text-slate-300">Inicia sesión para acceder a tus tareas privadas.</p>
-              <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input id="taskAuthEmail" type="email" autocomplete="email" placeholder="Email" class="rounded-lg bg-[#080812] border border-purple-500/40 px-3 py-2.5 text-sm text-white">
-                <input id="taskAuthPassword" type="password" autocomplete="current-password" placeholder="Contraseña (mín. 6)" class="rounded-lg bg-[#080812] border border-purple-500/40 px-3 py-2.5 text-sm text-white">
-                <div class="flex gap-2"><button id="taskLogin" type="button" class="flex-1 rounded-lg bg-purple-600 px-3 py-2 text-xs font-semibold">Entrar</button><button id="taskSignup" type="button" class="flex-1 rounded-lg border border-purple-400/50 px-3 py-2 text-xs">Crear cuenta</button></div>
-              </div>
-              <p id="taskAuthMessage" class="mt-2 text-xs text-slate-300" aria-live="polite"></p>
-            </section>
             <div id="taskWorkspace" class="space-y-5">
             <section class="p-4 rounded-xl bg-black/45 border border-purple-500/35">
               <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
