@@ -7,6 +7,35 @@
   let user = null, tasks = [], filterStatus = "all", booted = false;
   const $ = id => document.getElementById(id);
   const err = e => e?.message || "Error desconocido";
+  const priorityRank = t => ({high:0,medium:1,low:2}[t.priority] ?? 1);
+  function taskOrder(a,b){
+    const aDone=a.status==="completed",bDone=b.status==="completed";
+    if(aDone!==bDone)return aDone?1:-1;
+    if(aDone&&bDone)return (b.completed_at||"").localeCompare(a.completed_at||"");
+    const priority=priorityRank(a)-priorityRank(b);
+    if(priority)return priority;
+    const today=new Date().toISOString().slice(0,10);
+    const aToday=a.due_date===today,bToday=b.due_date===today;
+    if(aToday!==bToday)return aToday?-1:1;
+    const due=(a.due_date||"9999-12-31").localeCompare(b.due_date||"9999-12-31");
+    if(due)return due;
+    return (b.created_at||"").localeCompare(a.created_at||"");
+  }
+  function renderDashboardPreview(){
+    const preview=$("taskPreviewList"),counter=$("taskCompletedCount");
+    if(counter)counter.textContent=tasks.filter(t=>t.status==="completed").length+"/"+tasks.length+" completadas";
+    const sidebar=$("taskSidebarCount");if(sidebar)sidebar.textContent=String(tasks.length);
+    if(!preview)return;
+    preview.replaceChildren();
+    const top=tasks.filter(t=>t.status!=="completed").sort(taskOrder).slice(0,3);
+    if(!top.length){const empty=document.createElement("p");empty.className="rounded-lg border border-white/10 bg-black/30 p-3 text-xs text-slate-400";empty.textContent="No tienes tareas pendientes.";preview.appendChild(empty);return;}
+    top.forEach(t=>{
+      const row=document.createElement("div");row.className="flex items-center justify-between gap-2 rounded-lg border border-white/10 bg-black/40 p-2 hover:border-purple-400/60 transition";
+      const label=document.createElement("button");label.type="button";label.className="min-w-0 flex-1 truncate text-left text-xs text-slate-100 hover:text-purple-200";label.textContent=t.title;label.title=t.title;label.onclick=e=>{e.stopPropagation();window.openFolder("tasks");};
+      const mark=document.createElement("button");mark.type="button";mark.className="shrink-0 rounded bg-purple-500/20 px-2 py-1 text-[9px] font-mono text-purple-200";const dueToday=t.due_date===new Date().toISOString().slice(0,10);mark.textContent=( {high:"URGENTE",medium:"MEDIA",low:"BAJA"}[t.priority]||"MEDIA")+(dueToday?" · HOY":"");mark.title=t.due_date?"Fecha: "+t.due_date:"Sin fecha";mark.onclick=e=>{e.stopPropagation();update(t,{status:"completed",completed_at:new Date().toISOString()});};
+      row.append(label,mark);preview.appendChild(row);
+    });
+  }
   function msg(text, bad=false) {
     const box = $("taskMessageBox"); if (!box) return;
     box.textContent = text || ""; box.classList.toggle("hidden", !text);
@@ -23,15 +52,18 @@
   }
   async function load() {
     if(!user){msg("Inicia sesión para consultar tus tareas.",true);return;}
+    const cutoff=new Date(Date.now()-7*24*60*60*1000).toISOString();
+    const cleanup=await db.from("tasks").delete().eq("user_id",user.id).eq("status","completed").lt("completed_at",cutoff);
     const {data,error}=await db.from("tasks").select("*").eq("user_id",user.id).order("created_at",{ascending:false});
     if(error){msg("No se pudieron cargar tareas: "+err(error),true);return;}
-    tasks=data||[];render();
+    tasks=data||[];renderDashboardPreview();render();
+    if(cleanup.error)msg("No se pudieron limpiar tareas antiguas: "+err(cleanup.error),true);
   }
   function render() {
     const list=$("taskList");if(!list)return;list.replaceChildren();renderChart();
     const q=$("searchInput").value.trim().toLowerCase(),cat=$("filterCategory").value,sort=$("sortBy").value;
     let shown=tasks.filter(t=>(filterStatus==="all"||t.status===filterStatus)&&(cat==="all"||(t.category||"general")===cat)&&(!q||(t.title||"").toLowerCase().includes(q)||(t.description||"").toLowerCase().includes(q)));
-    shown.sort((a,b)=>sort==="due_asc"?(a.due_date||"9999").localeCompare(b.due_date||"9999"):(b.created_at||"").localeCompare(a.created_at||""));
+    shown.sort((a,b)=>taskOrder(a,b)||(sort==="due_asc"?(a.due_date||"9999").localeCompare(b.due_date||"9999"):0));
     $("emptyState").classList.toggle("hidden",shown.length>0);
     shown.forEach(t=>{
       const row=document.createElement("article");row.className="rounded-xl border border-white/10 bg-[#11111f]/80 p-3 flex flex-wrap items-center justify-between gap-3 transition hover:border-purple-400/50";
@@ -56,6 +88,7 @@
     $("logoutButton").onclick=async()=>{const {error}=await db.auth.signOut();if(error)$("loginMessage").textContent=err(error);showPanel(null);};
     db.auth.onAuthStateChange((event,session)=>setTimeout(()=>showPanel(session),0));
     db.auth.getSession().then(({data,error})=>{if(error){$("loginMessage").textContent=err(error);showPanel(null);}else showPanel(data.session);});
+    window.setInterval(()=>{if(user)load();},60*60*1000);
   }
   window.initAetherTasks=function(){
     if(!db)return;
@@ -63,5 +96,5 @@
     [["stAll","all"],["stPending","pending"],["stProgress","in_progress"],["stCompleted","completed"]].forEach(([id,value])=>$(id).onclick=()=>{filterStatus=value;render();});
     if(user)load();
   };
+  window.refreshAetherTasks=renderDashboardPreview;
   bootAuth();})();
-
