@@ -3,7 +3,7 @@
   "use strict";
   const SUPABASE_URL = "https://dzyhecukaiujbuvsemtf.supabase.co";
   const SUPABASE_KEY = "sb_publishable_Iv1sS0zzisomBIRZwp_GwA_dPWksAwl";
-  const GOOGLE_CLIENT_ID = "AÑADE_AQUI_TU_CLIENT_ID_DE_GOOGLE";
+  const GOOGLE_CLIENT_ID = "1017357013483-kv9891mvk4bophpuge9g219ns0b9ri5a.apps.googleusercontent.com";
   const GOOGLE_CALENDAR_FUNCTION = SUPABASE_URL + "/functions/v1/google-calendar";
   const db = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY);
   let user = null, tasks = [], filterStatus = "all", booted = false, calendarEvents = [], calendarConnected = false;
@@ -123,3 +123,4 @@
   };
   window.refreshAetherTasks=renderDashboardPreview;
   bootAuth();})();
+
